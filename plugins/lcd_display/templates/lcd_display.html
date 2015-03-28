@@ -1,0 +1,54 @@
+$def with(plugin_options, events)
+
+$var title: LCD settings
+$var page: plugins
+
+<script>
+    // Initialize behaviors
+    jQuery(document).ready(function(){
+
+        jQuery("#cSubmit").click(function() {
+            jQuery("#pluginForm").submit();
+        });
+        jQuery("button#cCancel").click(function(){
+            window.location="/";
+        });
+
+    });
+</script>
+
+<div id="plugin">
+    <div class="title">LCD settings</div>
+    <p>This plugin shows information on a 16x2 or 16x1 character LCD with PCF8574(A).</p>
+    <p>Automatically detects the display at the following I2C addresses: 0x20-0x27, 0x38-0x3F.</p>
+    <p>Compatible with the HD44780 controller.</p>
+    <p>Visit <a href="http://www.pihrt.com/elektronika/258-moje-rapsberry-pi-i2c-lcd-16x2">Martin Pihrt's blog</a> for more information.</p><br>
+    <form id="pluginForm" action="$plugins.plugin_url('lcd_display.settings_page')" method="post">
+        <table class="optionList">
+            <tr>
+                <td style='text-transform: none;'>Use I2C LCD:</td>
+                <td>
+                    <input name='use_lcd' type='checkbox'${" checked" if plugin_options['use_lcd'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use two lines:</td>
+                <td>
+                    <input name='two_lines' type='checkbox'${" checked" if plugin_options['two_lines'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Status:</td>
+                <td>
+                    <textarea style="font-family: monospace;" rows="7" cols="35" readonly>$'\n'.join(events)</textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="controls">
+    <button id="cSubmit" class="submit"><b>Submit</b></button>
+    <button id="cCancel" class="cancel danger">Cancel</button>
+</div>
+                                  
+                     

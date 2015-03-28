@@ -1,0 +1,114 @@
+$def with(plugin_options, events)
+
+$var title: SMS settings
+$var page: plugins
+
+<script>
+    // Initialize behaviors
+    jQuery(document).ready(function(){
+
+        jQuery("#cSubmit").click(function() {
+            jQuery("#pluginForm").submit();
+        });
+        jQuery("button#cCancel").click(function(){
+            window.location="/";
+        });
+
+    });
+</script>
+
+<div id="plugin">
+    <div class="title">SMS Settings</div>
+    <p>For this plugin is needed to SMS modem with the telephone service provider.</p>
+    <p>This plugin needs Gammu. If not installed Gammu and Python-Gammu, plugin installs Gammu and Python-Gammu in to the system himself.</p>
+    <p>On first use please wait for status.</p>
+    <p>Visit <a href="http://www.pihrt.com/elektronika/259-moje-rapsberry-pi-sms-ovladani-rpi">Martin Pihrt's blog</a> for more information.</p>
+    <form id="pluginForm" action="$plugins.plugin_url('sms_adj.settings_page')" method="post">
+        <table class="optionList">
+            <tr>
+                <td style='text-transform: none;'>Use SMS modem:</td>
+                <td>
+                    <input name='use_sms' type='checkbox'${" checked" if plugin_options['use_sms'] else ""}>   
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Number 1:</td>
+                <td>
+                    <input name='tel1' type='text' value='$plugin_options["tel1"]'>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Number 2:</td>
+                <td>
+                    <input name='tel2' type='text' value='$plugin_options["tel2"]'>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Command for info:</td>
+                <td>
+                    <input name='txt1' type='text' value='$plugin_options["txt1"]'>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Command for stop irrigation:</td>
+                <td>
+                    <input name='txt2' type='text' value='$plugin_options["txt2"]'>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Command for start irrigation:</td>
+                <td>
+                    <input name='txt3' type='text' value='$plugin_options["txt3"]'>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Command for reboot system:</td>
+                <td>
+                    <input name='txt4' type='text' value='$plugin_options["txt4"]'>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Command for poweroff system:</td>
+                <td>
+                    <input name='txt5' type='text' value='$plugin_options["txt5"]'>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Command for update OSPi from GITHUB:</td>
+                <td>
+                    <input name='txt6' type='text' value='$plugin_options["txt6"]'>
+                </td>
+            </tr>
+             <tr>
+                <td style='text-transform: none;'>Command for send foto from webcam:</td>
+                <td>
+                    <input name='txt7' type='text' value='$plugin_options["txt7"]'> (For this function required email and webcam plugin) 
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Command for help:</td>
+                <td>
+                    <input name='txt8' type='text' value='$plugin_options["txt8"]'> (Send SMS with all available commands) 
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Command for run now program:</td>
+                <td>
+                    <input name='txt9' type='text' value='$plugin_options["txt9"]'> (Example: runxx = run now program xx if exists) 
+                </td>
+            </tr> 
+            <tr>
+                <td style='text-transform: none;'>Status:</td>
+                <td>
+                    <textarea style="font-family: monospace;" rows="7" cols="35" readonly>$'\n'.join(events)</textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="controls">
+    <button id="cSubmit" class="submit"><b>Submit</b></button>
+    <button id="cCancel" class="cancel danger">Cancel</button>
+</div>
+                                  
+                     
