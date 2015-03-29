@@ -11,14 +11,13 @@ import traceback
 from threading import Thread, Event
 
 import web
-from ospy import helpers
 from ospy.stations import stations
 from ospy.options import options
 from ospy.log import log
 from plugins import PluginOptions, plugin_url
-import plugins
 from ospy.webpages import ProtectedPage
 from ospy.helpers import get_rpi_revision
+from ospy.helpers import datetime_string
 
 NAME = 'Wind Speed Monitor'
 LINK = 'settings_page'
@@ -34,8 +33,6 @@ wind_options = PluginOptions(
         "maxspeed": 20               # 20 max speed to deactivate stations  
     }
 )
-
-email_options = PluginOptions('Email Notifications',{ "emlsubject":""})
 
 ################################################################################
 # Main function loop:                                                          #
@@ -82,8 +79,6 @@ class WindSender(Thread):
         send = False      # send email
         once_text = True  # text enabled plugin
         two_text = True   # text disabled plugin
-       
-        subject = email_options['emlsubject']
 
         while not self._stop.is_set():
             try:
@@ -115,11 +110,10 @@ class WindSender(Thread):
                         once_text = True
 
                 if send:
-                    TEXT = ('On ' + time.strftime("%d.%m.%Y at %H:%M:%S", time.localtime(
-                        time.time())) + ' System detected error: wind speed monitor. All stations set to OFF.')
+                    TEXT = (datetime_string() + ': System detected error: wind speed monitor. All stations set to OFF.')
                     try:
                         from plugins.email_notifications import email 
-                        email(subject, TEXT)                             # send email without attachments
+                        email(TEXT)                             # send email without attachments
                         log.info(NAME, 'Email was sent: ' + TEXT)
                         send = False
                     except Exception as err:

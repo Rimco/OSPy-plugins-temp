@@ -9,13 +9,12 @@ import traceback
 from threading import Thread, Event
 
 import web
-from ospy import helpers
 from ospy.stations import stations
 from ospy.options import options
 from ospy.log import log
 from plugins import PluginOptions, plugin_url
-import plugins
 from ospy.webpages import ProtectedPage
+from ospy.helpers import datetime_string
 
 NAME = 'Pressure Monitor'
 LINK = 'settings_page'
@@ -29,9 +28,6 @@ pressure_options = PluginOptions(
         "sendeml": True
     }
 )
-
-email_options = PluginOptions('Email Notifications',{ "emlsubject":""})
-
 
 ################################################################################
 # GPIO input pullup:                                                           #
@@ -84,8 +80,6 @@ class PressureSender(Thread):
         last_time = int(time.time())
         actual_time = int(time.time())
 
-        subject = email_options['emlsubject']
-
         while not self._stop.is_set():
             try:
                 if pressure_options['use_press_monitor']:                           # if pressure plugin is enabled
@@ -111,7 +105,7 @@ class PressureSender(Thread):
                                     stations.clear()                                   # set all station to off
                                     log.clear(NAME)
                                     log.info(NAME,
-                                             'Pressure sensor is not activated in time -> stops all stations and sends email.')
+                                             'Pressure sensor is not activated in time -> stops all stations and send email.')
                                     if pressure_options['sendeml']:                    # if enabled send email
                                         send = True
 
@@ -145,11 +139,10 @@ class PressureSender(Thread):
                         three_text = False
 
                 if send:
-                    TEXT = ('On ' + time.strftime("%d.%m.%Y at %H:%M:%S", time.localtime(
-                        time.time())) + ' System detected error: pressure sensor.')
+                    TEXT = (datetime_string() + ': System detected error: pressure sensor.')
                     try:
                         from plugins.email_notifications import email
-                        email(subject, TEXT)                                     # send email without attachments
+                        email(TEXT)                                     # send email without attachments
                         log.info(NAME, 'Email was sent: ' + TEXT)
                         send = False
                     except Exception as err:

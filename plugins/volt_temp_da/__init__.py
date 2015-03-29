@@ -13,6 +13,7 @@ from ospy.log import log
 from plugins import PluginOptions, plugin_url, plugin_data_dir
 from ospy.webpages import ProtectedPage
 from ospy.helpers import get_rpi_revision
+from ospy.helpers import datetime_string
 
 
 NAME = 'Voltage and Temperature Monitor'
@@ -90,7 +91,7 @@ class PCFSender(Thread):
                         self.status['ad%d_raw' % i] = val
                         self.status['ad%d' % i] = get_temp(val) if pcf_options['ad%d_temp' % i] else get_volt(val)
 
-                    log.info(NAME, time.strftime('%Y-%m-%d %H:%M:%S:'))
+                    log.info(NAME, datetime_string)
                     for i in range(4):
                         log.info(NAME, pcf_options['ad%d_label' % i] + ': ' + format(self.status['ad%d' % i],
                                                                                      pcf_options['ad%d_temp' % i]))
@@ -188,7 +189,7 @@ def write_log(json_data):
 
 def update_log(status):
     log_data = read_log()
-    data = {'datetime': time.strftime('%Y-%m-%d %H:%M:%S')}
+    data = {'datetime': datetime_string()}
     for i in range(4):
         data['ad%d' % i] = format(status['ad%d' % i], pcf_options['ad%d_temp' % i])
     log_data.insert(0, data)

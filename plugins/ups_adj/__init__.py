@@ -10,11 +10,10 @@ from threading import Thread, Event
 
 import web
 from ospy.helpers import poweroff
-from ospy.options import options
 from ospy.log import log
 from plugins import PluginOptions, plugin_url
-import plugins
 from ospy.webpages import ProtectedPage
+from ospy.helpers import datetime_string
 
 NAME = 'UPS Monitor'
 LINK = 'settings_page'
@@ -106,7 +105,7 @@ class UPSSender(Thread):
                             msg = 'UPS plugin detected fault on power line.' # send email with info power line fault
                             log.info(NAME, msg)
                             if ups_options['sendeml']:                       # if enabled send email
-                                send_email(self, msg)
+                                send_email(msg)
                                 once_three = True
                             once = False
 
@@ -125,7 +124,7 @@ class UPSSender(Thread):
                                 if ups_options['sendeml']:                    # if enabled send email
                                     if once_two:
                                         msg = 'UPS plugin - power line is not restore in time -> shutdown system!' # send email with info shutdown system
-                                        send_email(self, msg)
+                                        send_email(msg)
                                         once_two = False
 
                                 GPIO.output(pin_ups_down,
@@ -140,7 +139,7 @@ class UPSSender(Thread):
                                 msg = 'UPS plugin - power line has restored - OK.'
                                 log.clear(NAME)
                                 log.info(NAME, msg)
-                                send_email(self, msg)
+                                send_email(msg)
                                 once = True
                                 once_two = True
                                 once_three = False
@@ -174,14 +173,13 @@ def stop():
         ups_sender = None
 
 
-def send_email(self, msg):
+def send_email(msg):
     """Send email"""
-    mesage = ('On ' + time.strftime("%d.%m.%Y at %H:%M:%S", time.localtime(time.time())) + ' ' + str(msg))
+    message = datetime_string() + ': ' + str(msg)
     try:
         from plugins.email_notifications import email
-
-        email(None, mesage)     # send email without attachments
-        log.info(NAME, 'Email was sent: ' + mesage)
+        email(message)
+        log.info(NAME, 'Email was sent: ' + message)
     except Exception as err:
         log.info(NAME, 'Email was not sent! ' + str(err))
 

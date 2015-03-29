@@ -16,11 +16,11 @@ from ospy.inputs import inputs
 from ospy.options import options
 from ospy.log import log
 from plugins import PluginOptions, plugin_url
-import plugins
 from ospy.webpages import ProtectedPage
 from ospy.helpers import reboot, poweroff
 from ospy.programs import programs
 from ospy.stations import stations
+from ospy.helpers import datetime_string
 
 
 NAME = 'SMS Modem'
@@ -207,7 +207,7 @@ def sms_check(self):
         print '%-15s: %s' % ('State', m['State'])
         print '%-15s: %s' % ('SMS command', m['Text'])
         if (m['Number'] == tel1) or (m['Number'] == tel2):  # If telephone is admin 1 or admin 2
-            log.info(NAME, time.strftime("%d.%m.%Y at %H:%M:%S", time.localtime(time.time())) + ' SMS from admin')
+            log.info(NAME, datetime_string() + ': SMS from admin')
             if m['State'] == "UnRead":          # If SMS is unread
                 log.clear(NAME)
                 if m['Text'] == comm1:           # If command = comm1 (info - send SMS to admin phone1 and phone2)
@@ -357,7 +357,7 @@ def sms_check(self):
                         get_run_cam() # process save foto to ./data/image.jpg
                         msg = 'SMS plug-in send image file from webcam.'
 
-                        send_email(self, msg, get_image_location())
+                        send_email(msg, attach=get_image_location())
 
                     except ImportError:
                         log.info(NAME, 'Received SMS was deleted, but could not send email with photo from webcam')
@@ -424,14 +424,13 @@ def sms_check(self):
             log.info(NAME, 'Received SMS was deleted - SMS was not from admin')
 
 
-def send_email(self, msg, attachments):
+def send_email(msg, attachments):
     """Send email"""
-    mesage = ('On ' + time.strftime("%d.%m.%Y at %H:%M:%S", time.localtime(time.time())) + ' ' + str(msg))
+    message = datetime_string() + ': ' + str(msg)
     try:
         from plugins.email_notifications import email
-
-        email(None, mesage, attachments)
-        log.info(NAME, 'Email was sent: ' + mesage)
+        email(message, attach=attachments)
+        log.info(NAME, 'Email was sent: ' + message)
     except Exception as err:
         log.info(NAME, 'Email was not sent! ' + str(err))
 
