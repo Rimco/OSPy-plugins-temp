@@ -91,7 +91,7 @@ class PCFSender(Thread):
                         self.status['ad%d_raw' % i] = val
                         self.status['ad%d' % i] = get_temp(val) if pcf_options['ad%d_temp' % i] else get_volt(val)
 
-                    log.info(NAME, datetime_string)
+                    log.info(NAME, datetime_string())
                     for i in range(4):
                         log.info(NAME, pcf_options['ad%d_label' % i] + ': ' + format(self.status['ad%d' % i],
                                                                                      pcf_options['ad%d_temp' % i]))
