@@ -12,6 +12,9 @@ Plugin setup
 * Check Use SMS modem:  
   If checked use SMS modem plugin is enabled.  
 
+* Check Signal strength in the status window:  
+  If checked use Signal strength in the status window in list is information about the signal strength.    
+
 * Number 1:  
   Type 1 telephone number for 1 administrator in format +xxxyyyyyyyyy.
 
