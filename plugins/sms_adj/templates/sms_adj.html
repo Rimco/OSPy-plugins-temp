@@ -32,6 +32,12 @@ $var page: plugins
                 </td>
             </tr>
             <tr>
+                <td style='text-transform: none;'>Signal strength in the status window:</td>
+                <td>
+                    <input name='use_strength' type='checkbox'${" checked" if plugin_options['use_strength'] else ""}>   
+                </td>
+            </tr>
+            <tr>
                 <td style='text-transform: none;'>Number 1:</td>
                 <td>
                     <input name='tel1' type='text' value='$plugin_options["tel1"]'>

@@ -32,6 +32,7 @@ sms_options = PluginOptions(
         'tel1': '+xxxyyyyyyyyy',
         'tel2': '+xxxyyyyyyyyy',
         'use_sms': False,
+        'use_strength': False
         'txt1': 'info',
         'txt2': 'stop',
         'txt3': 'start',
@@ -162,7 +163,6 @@ def sms_check(self):
         import gammu
     except Exception:
         log.error(NAME, 'SMS Modem plug-in:\n' + traceback.format_exc())
-        sms_options["use_sms"] = False
         
     tel1 = sms_options['tel1']
     tel2 = sms_options['tel2']
@@ -180,10 +180,16 @@ def sms_check(self):
     sm.ReadConfig()
     try:
         sm.Init()
-        #log.info(NAME, "Checking SMS...")
+        log.debug(NAME, datetime_string() + ': Checking SMS...')
     except:
-        log.debug(NAME, "Error: SMS Modem fault")
+        err_string = ''.join(traceback.format_exc())
+        log.error(NAME, 'SMS Modem plug-in:\n' + err_string)
+        self._sleep(60)
 
+    if sms_options["use_strength"]:    # print strength signal in status Window every check SMS
+        signal = sm.GetSignalQuality() # list: SignalPercent, SignalStrength, BitErrorRate
+        log.info(NAME, datetime_string() + ': Signal: ' + str(signal['SignalPercent']) + '% ' + str(signal['SignalStrength']) + 'dB')
+    
     status = sm.GetSMSStatus()
     remain = status['SIMUsed'] + status['PhoneUsed'] + status['TemplatesUsed']
     sms = []
@@ -215,10 +221,8 @@ def sms_check(self):
                     temp = helpers.get_cpu_temp(options.temp_unit) + ' ' + options.temp_unit
                     ip = str(helpers.get_ip())
                     ver = version.ver_date
-                    dat = datetime.now().strftime('Date: %d.%m.%Y')
-                    tim = datetime.now().strftime('Time: %H:%M:%S')
                     datastr = (
-                    'SMS 1/2. ' + dat + ' ' + tim + ', TEMP: ' + temp + ', IP: ' + ip + ', SW: ' + ver + ', UP: ' + up  )
+                    'SMS 1/2. ' + datetime_string() + ', TEMP: ' + temp + ', IP: ' + ip + ', SW: ' + ver + ', UP: ' + up  )
                     message = {
                         'Text': datastr,
                         'SMSC': {'Location': 1},
