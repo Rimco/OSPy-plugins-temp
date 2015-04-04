@@ -108,8 +108,7 @@ class PCFSender(Thread):
 
             except Exception:
                 self.adc = None
-                err_string = ''.join(traceback.format_exc())
-                log.error(NAME, 'Voltage and Temperature Monitor plug-in:\n' + err_string)
+                log.error(NAME, 'Voltage and Temperature Monitor plug-in:\n' + traceback.format_exc())
                 self._sleep(60)
 
 

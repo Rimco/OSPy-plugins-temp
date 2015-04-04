@@ -99,8 +99,7 @@ def get_run_cam():
             cam_options['installed_fswebcam'] = False
 
     except Exception:
-        err_string = ''.join(traceback.format_exc())
-        log.error(NAME, 'Webcam plug-in:\n' + err_string)
+        log.error(NAME, 'Webcam plug-in:\n' + traceback.format_exc())
         cam_options['installed_fswebcam'] = False
 
 

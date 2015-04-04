@@ -83,8 +83,7 @@ class LCDSender(Thread):
                 self._sleep(4)
 
             except Exception:
-                err_string = ''.join(traceback.format_exc())
-                log.error(NAME, 'LCD display plug-in:\n' + err_string)
+                log.error(NAME, 'LCD display plug-in:\n' + traceback.format_exc())
                 self._sleep(60)
 
 

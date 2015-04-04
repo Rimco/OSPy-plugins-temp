@@ -124,8 +124,7 @@ class WindSender(Thread):
 
             except Exception:
                 log.clear(NAME)
-                err_string = ''.join(traceback.format_exc())
-                log.error(NAME, 'Wind Speed monitor plug-in:\n' + err_string)
+                log.error(NAME, 'Wind Speed monitor plug-in:\n' + traceback.format_exc())
                 self._sleep(60)
 
 

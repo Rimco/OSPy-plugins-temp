@@ -151,8 +151,7 @@ class PressureSender(Thread):
                 self._sleep(1)
 
             except Exception:
-                err_string = ''.join(traceback.format_exc())
-                log.error(NAME, 'Pressure monitor plug-in:\n' + err_string)
+                log.error(NAME, 'Pressure monitor plug-in:\n' + traceback.format_exc())
                 self._sleep(60)
 
 

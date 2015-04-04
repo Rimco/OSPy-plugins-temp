@@ -135,8 +135,7 @@ class WaterSender(Thread):
 
             except Exception:
                 self.bus = None
-                err_string = ''.join(traceback.format_exc())
-                log.error(NAME, 'Water Meter plug-in:\n' + err_string)
+                log.error(NAME, 'Water Meter plug-in:\n' + traceback.format_exc())
                 self._sleep(60)
 
 

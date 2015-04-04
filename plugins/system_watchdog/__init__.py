@@ -71,9 +71,7 @@ class StatusChecker(Thread):
 
         except Exception:
                 self.started.set()
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                err_string = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
-                log.error(NAME, 'System watchodg plug-in:\n' + err_string)
+                log.error(NAME, 'System watchodg plug-in:\n' + traceback.format_exc())
    
        
     def run(self):
@@ -88,9 +86,7 @@ class StatusChecker(Thread):
 
             except Exception:
                 self.started.set()
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                err_string = ''.join(traceback.format_exception(exc_type, exc_value, exc_traceback))
-                log.error(NAME, 'System watchodg plug-in:\n' + err_string)
+                log.error(NAME, 'System watchodg plug-in:\n' + traceback.format_exc())
                 self._sleep(60)
 
 

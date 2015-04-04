@@ -124,8 +124,7 @@ class SMSSender(Thread):
                 self._sleep(10)
 
             except Exception:
-                err_string = ''.join(traceback.format_exc())
-                log.error(NAME, 'SMS Modem plug-in:\n' + err_string)
+                log.error(NAME, 'SMS Modem plug-in:\n' + traceback.format_exc())
                 self._sleep(60)
 
 
@@ -162,8 +161,7 @@ def sms_check(self):
     try:
         import gammu
     except Exception:
-        err_string = ''.join(traceback.format_exc())
-        log.error(NAME, 'SMS Modem plug-in:\n' + err_string)
+        log.error(NAME, 'SMS Modem plug-in:\n' + traceback.format_exc())
         sms_options["use_sms"] = False
         
     tel1 = sms_options['tel1']
