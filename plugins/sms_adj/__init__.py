@@ -32,7 +32,7 @@ sms_options = PluginOptions(
         'tel1': '+xxxyyyyyyyyy',
         'tel2': '+xxxyyyyyyyyy',
         'use_sms': False,
-        'use_strength': False
+        'use_strength': False,
         'txt1': 'info',
         'txt2': 'stop',
         'txt3': 'start',
@@ -182,8 +182,7 @@ def sms_check(self):
         sm.Init()
         log.debug(NAME, datetime_string() + ': Checking SMS...')
     except:
-        err_string = ''.join(traceback.format_exc())
-        log.error(NAME, 'SMS Modem plug-in:\n' + err_string)
+        log.error(NAME, 'SMS Modem plug-in:\n' + traceback.format_exc())
         self._sleep(60)
 
     if sms_options["use_strength"]:    # print strength signal in status Window every check SMS
