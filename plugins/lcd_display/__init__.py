@@ -29,6 +29,7 @@ lcd_options = PluginOptions(
     {
         "use_lcd": True,
         "two_lines": True,
+        "debug_line": False,
         "address": 0
     }
 )
@@ -63,7 +64,8 @@ class LCDSender(Thread):
         while not self._stop.is_set():
             try:
                 if lcd_options['use_lcd']:  # if LCD plugin is enabled
-                    log.clear(NAME)
+                    if lcd_options['debug_line']:
+                        log.clear(NAME)
                     line1 = get_report(report_index)
                     line2 = get_report(report_index + 1)
 
@@ -73,10 +75,12 @@ class LCDSender(Thread):
                         line2 = get_report(report_index + 1)
 
                     update_lcd(line1, line2)
-
-                    log.info(NAME, line1)
+                    
+                    if lcd_options['debug_line']:
+                        log.info(NAME, line1)
                     if lcd_options['two_lines']:
-                        log.info(NAME, line2)
+                        if lcd_options['debug_line']:
+                            log.info(NAME, line2)
                         report_index += 2
                     else:
                         report_index += 1

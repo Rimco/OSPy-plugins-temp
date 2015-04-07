@@ -13,6 +13,10 @@ Plugin setup
 * Check Use two lines:  
   If checked use two lines LCD display is 2x16 or 1x16 character.
 
+* Check Use print lines to debug files:  
+  If checked use print lines to debug files line 1 or line 2 print to debug files.  
+  (warning: If you enable this debug file will have a huge size).  
+
 * Status:
   Status window from the plugin.  
   Example message on the LCD display:  
