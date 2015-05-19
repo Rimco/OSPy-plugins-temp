@@ -246,7 +246,7 @@ class log_csv(ProtectedPage):  # save log file from web as csv file type
         for record in log_records:
             data += record['datetime']
             for i in range(4):
-                data += ",\t" + record['ad%d' % i]
+                data += ";\t" + record['ad%d' % i]
             data += '\n'
 
         web.header('Content-Type', 'text/csv')
