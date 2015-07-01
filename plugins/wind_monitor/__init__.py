@@ -48,6 +48,7 @@ class WindSender(Thread):
         self.pcf = None
         self.status = {}
         self.status['meter'] = 0.0
+        self.status['kmeter'] = 0.0
 
         self._sleep_time = 0
         self.start()
@@ -85,6 +86,7 @@ class WindSender(Thread):
                 if self.bus is not None and wind_options['use_wind_monitor']:  # if wind plugin is enabled
                     val = (counter(self.bus)/wind_options['pulses'])*wind_options['metperrot'] 
                     self.status['meter'] = val
+                    self.status['kmeter'] = val*3.6
                     
                     if once_text:
                         log.clear(NAME)
@@ -126,6 +128,7 @@ class WindSender(Thread):
                 log.clear(NAME)
                 log.error(NAME, 'Wind Speed monitor plug-in:\n' + traceback.format_exc())
                 self._sleep(60)
+                self.pcf = set_counter(self.bus)     # set pcf8583 as counter
 
 
 wind_sender = None
