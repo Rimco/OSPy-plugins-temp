@@ -1,0 +1,64 @@
+$def with(plugin_options, events)
+
+$var title: Button control settings
+$var page: plugins
+
+<script>
+    // Initialize behaviors
+    jQuery(document).ready(function(){
+        jQuery("#cSubmit").click(function() {
+            jQuery("#pluginForm").submit();
+        });
+        jQuery("button#cCancel").click(function(){
+            window.location="/";
+        });
+    });
+</script>
+
+<div id="plugin">
+    <div class="title">Button control settings</div>
+    <p>Visit <a href="http://www.pihrt.com">Martin Pihrt's blog</a> for more information.</p><br>
+    <form id="pluginForm" action="$plugins.plugin_url('button_control.settings_page')" method="post">
+        <table class="optionList">
+            <tr>
+                <td style='text-transform: none;'>Use button control:</td>
+                <td>
+                    <input name='use_button' type='checkbox'${" checked" if plugin_options['use_button'] else ""}>
+                </td>
+            </tr>
+            $for i in range(8):
+              <tr>
+                <td style="text-transform: none;">Button ${i} controls:</td>
+                <td>
+                <select id="button${i}" name="button${i}">
+                <option value="">$plugin_options["button${i}"]</option>
+                <option value="reboot">Reboot sprinkler</option>
+                <option value="restart">Restart OS system</option>
+                <option value="power">Shutdown OS system</option>
+                <option value="p1">Start program 1</option>
+                <option value="p2">Start program 2</option>
+                <option value="p3">Start program 3</option>
+                <option value="p4">Start program 4</option>
+                <option value="p5">Start program 5</option>
+                <option value="p6">Start program 6</option>
+                <option value="stop">Stop all stations</option>
+                <option value="manual">Switch to manual or scheduler control</option>
+                <option value="masterOn">Master station ON</option>
+                <option value="masterOFF">Master station OFF</option>
+                </select>
+                </td>
+              </tr>
+            <tr>
+                <td style='text-transform: none;'>Status:</td>
+                <td>
+                    <textarea style="font-family: monospace;" rows="7" cols="35" readonly>$'\n'.join(events)</textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="controls">
+    <button id="cSubmit" class="submit"><b>Submit</b></button>
+    <button id="cCancel" class="cancel danger">Cancel</button>
+</div>
+                                  
