@@ -71,6 +71,7 @@ class PluginSender(Thread):
         while not self._stop.is_set():
             try:
                 if plugin_options['use_button']:  # if button plugin is enabled
+                    read_buttons()
                     self._sleep(1)
 
             except Exception:
@@ -101,7 +102,7 @@ def read_buttons():
     try:
         DEVICE = 0x27 # Device address (A0,A1,A2 to vcc)
         IODIRA = 0x00 # Pin direction register A
-        GPIOA  = 0x12 # Register for port input
+        GPIOA  = 0x12 # Register for input
         # Set 8 GPA pins as input_pullUP
         bus.write_byte_data(DEVICE,IODIRA,0xFF)
         # Read state of GPIOA register
@@ -132,7 +133,6 @@ def read_buttons():
             button_number = button_number + 1
             log.debug(NAME, 'Switch 1 pressed')    
         return button_number 
-        self._sleep(1)
     except:
         log.error(NAME, 'Button plug-in:\n' + 'Read button - FAULT')
         return 0
@@ -141,7 +141,7 @@ def led_outputs():
     try:
         DEVICE = 0x27 # Device address (A0,A1,A2 to vcc)
         IODIRB = 0x01 # Pin direction register B
-        OLATA  = 0x14 # Register for outputs
+        OLATA  = 0x13 # Register for outputs
         # Set all GPB pins as outputs by setting
         # all bits of IODIRB register to 0
         bus.write_byte_data(DEVICE,IODIRB,0x00)
