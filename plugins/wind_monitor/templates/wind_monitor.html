@@ -23,6 +23,7 @@ $var page: plugins
     switches off all station  and sends email with error. Prevent safety for fault watering.</p>
     <p>This plugin needs an enabled I2C bus and connected counter PCF8583 on I2C address 0x50 (0x51).</p>
     <p>(1m/s = 3,6 km/h or 1m/s = 2,237 mile/h).</p>
+    <p> Maximum detected speed is 150 km/h (42 m/sec).</p>
     <form id="pluginForm" action="$plugins.plugin_url('wind_monitor.settings_page')" method="post">
         <table class="optionList">
             <tr>
@@ -56,13 +57,13 @@ $var page: plugins
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Max wind speed:</td>
+                <td style='text-transform: none;'>Max wind speed for stop stations:</td>
                 <td>
                     <input name='maxspeed' type='text' value='$plugin_options["maxspeed"]' style="width:40px;"> (m/s) 
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Wind speed state:</td>
+                <td style='text-transform: none;'>Wind speed state (average every 10 sec):</td>
                 <td>
                    <b> $status['kmeter'] (km/h)</b> -> $status['meter'] (m/s) 
                 </td>
