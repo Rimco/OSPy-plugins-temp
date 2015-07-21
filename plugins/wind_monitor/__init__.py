@@ -78,41 +78,51 @@ class WindSender(Thread):
 
         log.clear(NAME)
         send = False      # send email
-        once_text = True  # text enabled plugin
-        two_text = True   # text disabled plugin
-
+        l = [] # list 10 measures
+        x = 1  # index of list  
+        avg_puls = 0 # average pulses
+        log.info(NAME,'Please wait 10 sec...')
         while not self._stop.is_set():
             try:
                 if self.bus is not None and wind_options['use_wind_monitor']:  # if wind plugin is enabled
-                    val = (counter(self.bus)/wind_options['pulses'])*wind_options['metperrot'] 
-                    self.status['meter'] = val
-                    self.status['kmeter'] = val*3.6
+                    while x <= 10:
+                       puls = counter(self.bus)
+                       l.append(puls)
+                       x = x + 1
+                       self._sleep(1)
+ 
+                    avg_puls = reduce(lambda x, y: x + y, l) / len(l)
+                    if avg_puls >= 42: # maximum pulses from counter
+                       log.error(NAME,'Wind speed > 150 km/h (42 m/sec)')
+                       x = 0
+                       l = []
                     
-                    if once_text:
-                        log.clear(NAME)
-                        log.info(NAME, 'Wind Speed Monitor plug-in is enabled.')
-                        once_text = False
-                        two_text = True
+                    val = (avg_puls/wind_options['pulses'])*wind_options['metperrot'] 
+                    self.status['meter'] = round(val,2)
+                    self.status['kmeter'] = round(val*3.6,2)
+                    log.clear(NAME)
+                    log.info(NAME,'Average m/sec: ' + str(round(val,2)))
+                    log.info(NAME,'Average pulses/sec: ' + str(avg_puls))
                    
                     if get_station_is_on():                               # if station is on
-                       if val >= wind_options['maxspeed']:                # if wind speed is > options max speed
+                       if int(val) >= int(wind_options['maxspeed']):      # if wind speed is > options max speed
                           log.clear(NAME)
                           log.finish_run(None)                            # save log
                           stations.clear()                                # set all station to off
                           log.clear(NAME)
                           log.info(NAME,'Stops all stations and sends email if enabled sends email.')
                           if wind_options['sendeml']:                     # if enabled send email
-                             send = True
+                             send = True                    
                                       
                 else:
-                    if two_text:                                          # text on the web if plugin is disabled
+                        # text on the web if plugin is disabled
                         log.clear(NAME)
                         log.info(NAME, 'Wind speed monitor plug-in is disabled.')
-                        two_text = False
-                        once_text = True
+                        self._sleep(3600)
+                        
 
                 if send:
-                    TEXT = (datetime_string() + ': System detected error: wind speed monitor. All stations set to OFF.')
+                    TEXT = (datetime_string() + ': System detected error: wind speed monitor. All stations set to OFF. Wind is: ' + str(round(val*3.6,2)) + ' km/h.' )
                     try:
                         from plugins.email_notifications import email 
                         email(TEXT)                             # send email without attachments
@@ -121,6 +131,10 @@ class WindSender(Thread):
                     except Exception as err:
                         log.clear(NAME)
                         log.error(NAME, 'Email was not sent! ' + str(err))
+
+                if x >= 10: # erase list pulses
+                   x = 0
+                   l = []
 
                 self._sleep(1)
 
