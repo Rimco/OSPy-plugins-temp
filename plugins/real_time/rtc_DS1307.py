@@ -5,6 +5,7 @@
 # Shovic V 1.0
 # only works in 24 hour mode
 # original code from below (DS1307 Code originally - had issues with 24 hour mode.  Removed 12 hour mode)
+# edited Martin Pihrt
 
 from datetime import datetime
 import smbus
@@ -107,17 +108,24 @@ class rtc_DS1307():
                 self._read_month(), self._read_date(), self._read_hours(),
                 self._read_minutes(), self._read_seconds(), 0, tzinfo=tzinfo)
 
+# not tested 22.11.2015------------------------
     def start_clock(self):	
-	bus.write_byte(self._I2C_ADDR, 0x00)
-	self.second = bus.read_byte(self._I2C_ADDR) & 0x7f
-	bus.write_byte_data(self._I2C_ADDR, 0x00, self.second)
+	bus.write_byte(self._addr, 0x00)
+	self.second = bus.read_byte(self._addr) & 0x7f
+	bus.write_byte_data(self._addr, 0x00, self.second)
 	#print 'Start DS1307 Clock...'
   
     def stop_clock(self):						
-	bus.write_byte(self._I2C_ADDR, 0x00)
-	self.second = bus.read_byte(self._I2C_ADDR) | 0x80
-	bus.write_byte_data(self._I2C_ADDR, 0x00, self.second)			
+	bus.write_byte(self._addr, 0x00)
+	self.second = bus.read_byte(self._addr) | 0x80
+	bus.write_byte_data(self._addr, 0x00, self.second)			
 	#print 'Stop DS1307 Clock...'	
+ 
+    def is_running(self):
+    	bus.write_byte_data(self._addr, 0x00)
+    	self.data = bus.read_byte(self._addr, 1)
+        return !(self.data>>7);
+# not tested 22.11.2015------------------------    	
 		
     def write_all(self, seconds=None, minutes=None, hours=None, day=None,
             date=None, month=None, year=None, save_as_24h=True):
