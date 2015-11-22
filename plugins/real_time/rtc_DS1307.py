@@ -45,21 +45,18 @@ class rtc_DS1307():
     _REG_MONTH = 0x05
     _REG_YEAR = 0x06
     _REG_CONTROL = 0x07
+    _I2C_ADDR = 0x68
 
 
-    def __init__(self, twi=1, addr=0x68):
+    def __init__(self, twi=1):
         self._bus = smbus.SMBus(twi)
-        self._addr = addr
-
-
+        self._addr = _I2C_ADDR
 
     def _write(self, register, data):
         #print "addr =0x%x register = 0x%x data = 0x%x %i " % (self._addr, register, data,_bcd_to_int(data))
         self._bus.write_byte_data(self._addr, register, data)
 
-
     def _read(self, data):
-
         returndata = self._bus.read_byte_data(self._addr, data)
         #print "addr = 0x%x data = 0x%x %i returndata = 0x%x %i " % (self._addr, data, data, returndata, _bcd_to_int(returndata))
         return returndata
@@ -67,10 +64,8 @@ class rtc_DS1307():
     def _read_seconds(self):
         return _bcd_to_int(self._read(self._REG_SECONDS))
 
-
     def _read_minutes(self):
         return _bcd_to_int(self._read(self._REG_MINUTES))
-
 
     def _read_hours(self):
         d = self._read(self._REG_HOURS)
@@ -78,22 +73,17 @@ class rtc_DS1307():
 		d = 0x40
         return _bcd_to_int(d & 0x3F)
 
-
     def _read_day(self):
         return _bcd_to_int(self._read(self._REG_DAY))
-
 
     def _read_date(self):
         return _bcd_to_int(self._read(self._REG_DATE))
 
-
     def _read_month(self):
         return _bcd_to_int(self._read(self._REG_MONTH))
 
-
     def _read_year(self):
         return _bcd_to_int(self._read(self._REG_YEAR))
-
 
     def read_all(self):
         """Return a tuple such as (year, month, date, day, hours, minutes,
@@ -103,7 +93,6 @@ class rtc_DS1307():
                 self._read_day(), self._read_hours(), self._read_minutes(),
                 self._read_seconds())
 
-
     def read_str(self):
         """Return a string such as 'YY-DD-MMTHH-MM-SS'.
         """
@@ -111,7 +100,6 @@ class rtc_DS1307():
                 self._read_month(), self._read_date(), self._read_hours(),
                 self._read_minutes(), self._read_seconds())
   
-
     def read_datetime(self, century=21, tzinfo=None):
         """Return the datetime.datetime object.
         """
@@ -119,7 +107,18 @@ class rtc_DS1307():
                 self._read_month(), self._read_date(), self._read_hours(),
                 self._read_minutes(), self._read_seconds(), 0, tzinfo=tzinfo)
 
-
+    def start_clock(self):	
+	bus.write_byte(self._I2C_ADDR, 0x00)
+	self.second = bus.read_byte(self._I2C_ADDR) & 0x7f
+	bus.write_byte_data(self._I2C_ADDR, 0x00, self.second)
+	#print 'Start DS1307 Clock...'
+  
+    def stop_clock(self):						
+	bus.write_byte(self._I2C_ADDR, 0x00)
+	self.second = bus.read_byte(self._I2C_ADDR) | 0x80
+	bus.write_byte_data(self._I2C_ADDR, 0x00, self.second)			
+	#print 'Stop DS1307 Clock...'	
+		
     def write_all(self, seconds=None, minutes=None, hours=None, day=None,
             date=None, month=None, year=None, save_as_24h=True):
         """Direct write un-none value.
