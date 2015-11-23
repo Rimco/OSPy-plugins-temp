@@ -47,11 +47,12 @@ class rtc_DS1307():
     _REG_YEAR = 0x06
     _REG_CONTROL = 0x07
     _I2C_ADDR = 0x68
+    _CH = 0b10000000 # Clock halt bit value/mask
 
 
     def __init__(self, twi=1):
         self._bus = smbus.SMBus(twi)
-        self._addr = _I2C_ADDR
+        self._addr = self._I2C_ADDR
 
     def _write(self, register, data):
         #print "addr =0x%x register = 0x%x data = 0x%x %i " % (self._addr, register, data,_bcd_to_int(data))
@@ -62,7 +63,14 @@ class rtc_DS1307():
         #print "addr = 0x%x data = 0x%x %i returndata = 0x%x %i " % (self._addr, data, data, returndata, _bcd_to_int(returndata))
         return returndata
 
+    def _is_seconds_ok(self):
+        sec = _bcd_to_int(self._read(self._REG_SECONDS))
+        if sec < 0 or sec > 59:
+           raise ValueError('Seconds is out of range [0,59].')
+           self.write_now()   
+
     def _read_seconds(self):
+        self._is_seconds_ok() # check is seconds ok not 0x80?  
         return _bcd_to_int(self._read(self._REG_SECONDS))
 
     def _read_minutes(self):
@@ -108,25 +116,6 @@ class rtc_DS1307():
                 self._read_month(), self._read_date(), self._read_hours(),
                 self._read_minutes(), self._read_seconds(), 0, tzinfo=tzinfo)
 
-# not tested 22.11.2015------------------------
-    def start_clock(self):	
-	bus.write_byte(self._addr, 0x00)
-	self.second = bus.read_byte(self._addr) & 0x7f
-	bus.write_byte_data(self._addr, 0x00, self.second)
-	#print 'Start DS1307 Clock...'
-  
-    def stop_clock(self):						
-	bus.write_byte(self._addr, 0x00)
-	self.second = bus.read_byte(self._addr) | 0x80
-	bus.write_byte_data(self._addr, 0x00, self.second)			
-	#print 'Stop DS1307 Clock...'	
- 
-    def is_running(self):
-    	bus.write_byte_data(self._addr, 0x00)
-    	self.data = bus.read_byte(self._addr, 1)
-        return !(self.data>>7);
-# not tested 22.11.2015------------------------    	
-		
     def write_all(self, seconds=None, minutes=None, hours=None, day=None,
             date=None, month=None, year=None, save_as_24h=True):
         """Direct write un-none value.
