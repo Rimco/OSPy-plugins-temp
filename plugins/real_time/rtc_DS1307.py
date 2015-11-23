@@ -63,15 +63,13 @@ class rtc_DS1307():
         #print "addr = 0x%x data = 0x%x %i returndata = 0x%x %i " % (self._addr, data, data, returndata, _bcd_to_int(returndata))
         return returndata
 
-    def _is_seconds_ok(self):
+    def _read_seconds(self):
         sec = _bcd_to_int(self._read(self._REG_SECONDS))
         if sec < 0 or sec > 59:
-           raise ValueError('Seconds is out of range [0,59].')
-           self.write_now()   
-
-    def _read_seconds(self):
-        self._is_seconds_ok() # check is seconds ok not 0x80?  
-        return _bcd_to_int(self._read(self._REG_SECONDS))
+           self.write_now() 
+           return 0
+        else:
+           return _bcd_to_int(self._read(self._REG_SECONDS))
 
     def _read_minutes(self):
         return _bcd_to_int(self._read(self._REG_MINUTES))
