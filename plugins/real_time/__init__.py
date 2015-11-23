@@ -70,7 +70,7 @@ class RealTimeChecker(Thread):
                 if plugin_options['enabled']:
                     log.info(NAME, 'Local time: ' + datetime_string())
                     try:                                                                 # try use library rtc_DS1307
-                       ds1307 = rtc_DS1307.rtc_DS1307(1, 0x68)
+                       ds1307 = rtc_DS1307.rtc_DS1307(1)
 
                     except:
                        log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
@@ -89,13 +89,15 @@ class RealTimeChecker(Thread):
                        log.info(NAME, 'RTC time: ' + str(rtc_time))
 
                     except:
-                       log.info(NAME, 'RTC time: None')
+                       log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
                     
 
                     if ntp_time is not None and rtc_time is not None and ntp_time != rtc_time:   # try save NTP time to RTC DS1307 if NTP!=RTC
                        try:
                           log.info(NAME, 'Saving NTP time to RTC time.')                 
                           ds1307.write_datetime(getNTPtime())
+                          rtc_time = ds1307.read_datetime()                                 
+                          log.info(NAME, 'RTC time is now: ' + str(rtc_time))
 
                        except:
                           log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
