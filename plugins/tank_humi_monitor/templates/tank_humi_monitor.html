@@ -1,0 +1,129 @@
+$def with(plugin_options, events)
+
+$var title: Water tank and humidity monitor settings
+$var page: plugins
+
+<script>
+    // Initialize behaviors
+    jQuery(document).ready(function(){
+
+        jQuery("#cSubmit").click(function() {
+            jQuery("#pluginForm").submit();
+        });
+        jQuery("button#cCancel").click(function(){
+            window.location="/";
+        });
+
+    });
+</script>
+
+<div id="plugin">
+    <div class="title">Water tank and humidity monitor settings</div>
+    <p>This plugin check water level in water tank via ultrasonic sensor.</p>
+    <p>If water level is small plugins stop irigation system and sends email with error. Prevent safety for master station pump.</p>
+	<p>This plugin check humidity on the 8 sensors for 8 stations and adjusts run time for stations according to moisture.</p>
+    <form id="pluginForm" action="$plugins.plugin_url('tank_humi_monitor.settings_page')" method="post">
+        <table class="optionList">
+            <tr>
+                <td style='text-transform: none;'>Use ultrasonic measuring the water level in the tank:</td>
+                <td>
+                    <input name='use_sonic' type='checkbox'${" checked" if plugin_options['use_sonic'] else ""}> 
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>The distance from the sensor to the minimum water level in the tank:</td>
+                <td>
+                    <input name='distance_bottom' type='number' min="2" max="300" value='$plugin_options["distance_bottom"]'> (2-300 cm)
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>The distance from the sensor to the maximum water level in the tank:</td>
+                <td>
+                    <input name='distance_top' type='number' min="2" max="300" value='$plugin_options["distance_top"]'> (2-300 cm)
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>The water level from the bottom to the minimum water level in the tank:</td>
+                <td>
+                    <input name='water_minimum' type='number' min="2" max="300" value='$plugin_options["water_minimum"]'> (2-300 cm)
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Send an e-mail with an error that there is minimum water in the tank:</td>
+                <td>
+                    <input name='use_send_email' type='checkbox'${" checked" if plugin_options['use_send_email'] else ""}> (For this function required email plugin)
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use measuring frequenci probe 1:</td>
+                <td>
+                    <input name='use_freq_1' type='checkbox'${" checked" if plugin_options['use_freq_1'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use measuring frequenci probe 2:</td>
+                <td>
+                    <input name='use_freq_2' type='checkbox'${" checked" if plugin_options['use_freq_2'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use measuring frequenci probe 3:</td>
+                <td>
+                    <input name='use_freq_3' type='checkbox'${" checked" if plugin_options['use_freq_3'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use measuring frequenci probe 4:</td>
+                <td>
+                    <input name='use_freq_4' type='checkbox'${" checked" if plugin_options['use_freq_4'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use measuring frequenci probe 5:</td>
+                <td>
+                    <input name='use_freq_5' type='checkbox'${" checked" if plugin_options['use_freq_5'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use measuring frequenci probe 6:</td>
+                <td>
+                    <input name='use_freq_6' type='checkbox'${" checked" if plugin_options['use_freq_6'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use measuring frequenci probe 7:</td>
+                <td>
+                    <input name='use_freq_7' type='checkbox'${" checked" if plugin_options['use_freq_7'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Use measuring frequenci probe 8:</td>
+                <td>
+                    <input name='use_freq_8' type='checkbox'${" checked" if plugin_options['use_freq_8'] else ""}>
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Frequenci from sensor for 0% humidity:</td>
+                <td>
+                    <input name='minimum_freq' type='number' min="0" max="100000" value='$plugin_options["minimum_freq"]'> (0-100000 Hz)
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Frequenci from sensor for 100% humidity:</td>
+                <td>
+                    <input name='maximum_freq' type='number' min="0" max="100000" value='$plugin_options["maximum_freq"]'> (0-100000 Hz)
+                </td>
+            </tr>
+            <tr>
+                <td style='text-transform: none;'>Status:</td>
+                <td>
+                    <textarea style="font-family: monospace;" rows="7" cols="35" readonly>$'\n'.join(events)</textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="controls">
+    <button id="cSubmit" class="submit"><b>Submit</b></button>
+    <button id="cCancel" class="cancel danger">Cancel</button>
+</div>
