@@ -188,8 +188,9 @@ def get_report(index):
 
         except Exception:
             result = "Not available"
-    result = "Water Tank Level:"
-    elif index == 20:
+    elif index == 20:        
+        result = "Water Tank Level:"
+    elif index == 21:
         try:
             from plugins import tank_humi_monitor
 
