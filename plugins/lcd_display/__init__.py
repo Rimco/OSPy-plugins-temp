@@ -105,7 +105,7 @@ class DummyLCD(object):
         if line == 1:
             self._lines = text + self._lines[len(text):]
         elif line == 2:
-            self._lines = self._lines[:19] + text + self._lines[19 + len(text):]
+            self._lines = self._lines[:20] + text + self._lines[20 + len(text):]
         #log.debug('LCD', self._lines)
 
 
@@ -185,6 +185,16 @@ def get_report(index):
                 result = "GPIO is HIGH"
             else:
                 result = "GPIO is LOW"
+
+        except Exception:
+            result = "Not available"
+    result = "Water Tank Level:"
+    elif index == 20:
+        try:
+            from plugins import tank_humi_monitor
+
+            cm = tank_humi_monitor.get_sonic_tank_cm()
+            result = str(cm) + ' cm'
 
         except Exception:
             result = "Not available"
