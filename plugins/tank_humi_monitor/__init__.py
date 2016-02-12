@@ -89,7 +89,7 @@ class Sender(Thread):
                         log.clear(NAME)
                         if options['use_send_email']: 
                             send = True
-                        mini = False                                       # run once 1x if level is small (for send email, disable scheduler....)
+                            mini = False 
                         log.info(NAME, 'ERROR: Water in Tank < ' + str(options['water_minimum']) + ' cm! ')
                         log.finish_run(None)                               # save log
                         stations.clear()                                   # set all station to off
