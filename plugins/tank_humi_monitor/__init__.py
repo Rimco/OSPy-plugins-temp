@@ -74,6 +74,7 @@ class Sender(Thread):
 
     def run(self):
         send = False
+        mini = True
 	   
         while not self._stop.is_set():
             try:
@@ -84,12 +85,22 @@ class Sender(Thread):
                     level_in_tank = get_sonic_tank_cm()
                     log.info(NAME, 'Water in Tank: ' + str(level_in_tank) + ' cm.')
 
-                    if level_in_tank < int(options['water_minimum']): 
-		          log.info(NAME, 'Water in tank < ' + str(int(options['water_minimum'])) + ' cm! ')
- 
+                    if level_in_tank <= int(options['water_minimum']) and mini: 
+                        log.clear(NAME)
+                        if options['use_send_email']: 
+                            send = True
+                        mini = False                                       # run once 1x if level is small (for send email, disable scheduler....)
+                        log.info(NAME, 'ERROR: Water in Tank < ' + str(options['water_minimum']) + ' cm! ')
+                        log.finish_run(None)                               # save log
+                        stations.clear()                                   # set all station to off
+                        # todo options disabled scheduler                                                
+
+                    if level_in_tank > int(options['water_minimum']) + 5 and not mini: 
+                        mini = True
+                        
 
                 if send:
-                    TEXT = (datetime_string() + ': System detected error: Water Tank has minimum Water Level.')
+                    TEXT = (datetime_string() + '\nSystem detected error: Water Tank has minimum Water Level: ' + str(options['water_minimum']) + 'cm.\nScheduler is now disabled and all Stations turn Off.')
                     try:
                         from plugins.email_notifications import email
                         email(TEXT)
@@ -114,7 +125,6 @@ def start():
     global sender
     if sender is None:
         sender = Sender()
-
 
 def stop():
     global sender
