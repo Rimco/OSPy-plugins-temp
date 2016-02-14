@@ -26,12 +26,12 @@ LINK = 'settings_page'
 options = PluginOptions(
     NAME,
     {
-       "use_sonic": True,      # default use sonic sensor
+        "use_sonic": True,      # default use sonic sensor
 	"distance_bottom": 33,  # default 33 cm sensor <-> bottom tank
 	"distance_top": 2,      # default 2 cm sensor <-> top tank
 	"water_minimum": 6,     # default 6 cm water level <-> bottom tank
-       "use_send_email": True, # default send email	
-       "use_freq_1": False,    # default not use freq sensor 1
+        "use_send_email": True, # default send email	
+        "use_freq_1": False,    # default not use freq sensor 1
 	"use_freq_2": False,    # default not use freq sensor 2
 	"use_freq_3": False,    # default not use freq sensor 3
 	"use_freq_4": False,    # default not use freq sensor 4
@@ -93,7 +93,7 @@ class Sender(Thread):
                         log.info(NAME, 'ERROR: Water in Tank < ' + str(options['water_minimum']) + ' cm! ')
                         log.finish_run(None)                               # save log
                         stations.clear()                                   # set all station to off
-                        # todo options disabled scheduler                                                
+                        options.scheduler_enabled = False                                              
 
                     if level_in_tank > int(options['water_minimum']) + 5 and not mini: 
                         mini = True
