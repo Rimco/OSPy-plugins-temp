@@ -25,4 +25,7 @@ Based on soil moisture varies run time station in the range of 0% humidity = 100
 * Status:  
   Status window from the plugin.  
 
+The hardware should be connected as follows:
+<a href="/plugins/tank_humi_monitor/static/images/schematics.png"><img src="/plugins/tank_humi_monitor/static/images/schematics.png" width="100%"></a>
+
 Visit [Martin Pihrt's blog](http://pihrt.com/elektronika/339-moje-raspberry-pi-plugin-ospy-vlhkost-pudy-a-mozstvi-vody-v-tankua). for more information.
