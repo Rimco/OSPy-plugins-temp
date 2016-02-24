@@ -20,27 +20,28 @@ from plugins import PluginOptions, plugin_url
 from ospy.webpages import ProtectedPage
 from ospy.helpers import datetime_string
 
+
 NAME = 'Water Tank and Humidity Monitor'
 LINK = 'settings_page'
 
-options = PluginOptions(
+tank_options = PluginOptions(
     NAME,
     {
-        "use_sonic": True,      # default use sonic sensor
-	"distance_bottom": 33,  # default 33 cm sensor <-> bottom tank
-	"distance_top": 2,      # default 2 cm sensor <-> top tank
-	"water_minimum": 6,     # default 6 cm water level <-> bottom tank
-        "use_send_email": True, # default send email	
-        "use_freq_1": False,    # default not use freq sensor 1
-	"use_freq_2": False,    # default not use freq sensor 2
-	"use_freq_3": False,    # default not use freq sensor 3
-	"use_freq_4": False,    # default not use freq sensor 4
-	"use_freq_5": False,    # default not use freq sensor 5
-	"use_freq_6": False,    # default not use freq sensor 6
-	"use_freq_7": False,    # default not use freq sensor 7
-	"use_freq_8": False,    # default not use freq sensor 8
-	"minimum_freq": 400000, # default freq from sensor for 0% humi
-	"maximum_freq": 100000  # default freq from sensor for 100% humi	
+       "use_sonic": True,      # default use sonic sensor
+       "distance_bottom": 33,  # default 33 cm sensor <-> bottom tank
+       "distance_top": 2,      # default 2 cm sensor <-> top tank
+       "water_minimum": 6,     # default 6 cm water level <-> bottom tank
+       "use_send_email": True, # default send email
+       "use_freq_1": False,    # default not use freq sensor 1
+       "use_freq_2": False,    # default not use freq sensor 2
+       "use_freq_3": False,    # default not use freq sensor 3
+       "use_freq_4": False,    # default not use freq sensor 4
+       "use_freq_5": False,    # default not use freq sensor 5
+       "use_freq_6": False,    # default not use freq sensor 6
+       "use_freq_7": False,    # default not use freq sensor 7
+       "use_freq_8": False,    # default not use freq sensor 8
+       "minimum_freq": 400000, # default freq from sensor for 0% humi
+       "maximum_freq": 100000  # default freq from sensor for 100% humi	
     }
 )
 
@@ -73,34 +74,58 @@ class Sender(Thread):
             self._sleep_time -= 1
 
     def run(self):
+        once_text = True
+        two_text = True
         send = False
         mini = True
-	   
+        last_level = 0
+        
         while not self._stop.is_set():
             try:
-                if options['use_sonic']: 
-                    log.clear(NAME)
-                    #print get_sonic_cm(), get_sonic_tank_cm() #test
+                if tank_options['use_sonic']: 
+                    if two_text:
+                        log.clear(NAME)
+                        log.info(NAME, 'Water tank monitor is enabled.')
+                        once_text = True
+                        two_text = False
 
                     level_in_tank = get_sonic_tank_cm()
-                    log.info(NAME, 'Water in Tank: ' + str(level_in_tank) + ' cm.')
 
-                    if level_in_tank <= int(options['water_minimum']) and mini: 
-                        log.clear(NAME)
-                        if options['use_send_email']: 
+                    if level_in_tank != last_level: # only if level is changed
+                        last_level = level_in_tank
+                        if level_in_tank == -1:
+                            log.info(NAME, datetime_string() + ' Water level sensor is faulty!')
+                        else:
+                            log.info(NAME, datetime_string() + ' Water level: ' + str(level_in_tank) + ' cm.')
+
+                    if level_in_tank <= int(tank_options['water_minimum']) and mini and not options.manual_mode and level_in_tank > -1:
+                        
+                        if tank_options['use_send_email']: 
                             send = True
                             mini = False 
-                        log.info(NAME, 'ERROR: Water in Tank < ' + str(options['water_minimum']) + ' cm! ')
+    
+                        log.info(NAME, datetime_string() + ' ERROR: Water in Tank < ' + str(tank_options['water_minimum']) + ' cm! ')
+                        options.scheduler_enabled = False                  # disable scheduler
                         log.finish_run(None)                               # save log
-                        stations.clear()                                   # set all station to off
-                        options.scheduler_enabled = False                                              
+                        stations.clear()                                   # set all station to off  
+                                          
 
-                    if level_in_tank > int(options['water_minimum']) + 5 and not mini: 
+                    if level_in_tank > int(tank_options['water_minimum']) + 5 and not mini: 
                         mini = True
-                        
+                
+                else:
+                    if once_text:
+                       log.info(NAME, 'Water tank monitor is disabled.')
+                       once_text = False
+                       two_text = True
+                       last_level = 0
+
+                       
+                if tank_options['use_freq_1']:
+                    print get_freq(1), get_freq(2), get_freq(3), get_freq(4), get_freq(5), get_freq(6), get_freq(7), get_freq(8)
 
                 if send:
-                    TEXT = (datetime_string() + '\nSystem detected error: Water Tank has minimum Water Level: ' + str(options['water_minimum']) + 'cm.\nScheduler is now disabled and all Stations turn Off.')
+                    TEXT = (datetime_string() + '\nSystem detected error: Water Tank has minimum Water Level: ' + str(tank_options['water_minimum']) + 'cm.\nScheduler is now disabled and all Stations turn Off.')
                     try:
                         from plugins.email_notifications import email
                         email(TEXT)
@@ -147,7 +172,7 @@ def get_sonic_cm():
 def get_sonic_tank_cm():
     try:
         cm = get_sonic_cm()
-        tank_cm = maping(cm,int(options['distance_bottom']),int(options['distance_top']),int(options['distance_top']),int(options['distance_bottom']))
+        tank_cm = maping(cm,int(tank_options['distance_bottom']),int(tank_options['distance_top']),int(tank_options['distance_top']),int(tank_options['distance_bottom']))
         if tank_cm > 0:
            return tank_cm
         else:
@@ -161,6 +186,7 @@ def get_freq(freq_no):
         data = bus.read_i2c_block_data(address,26)
         if freq_no == 1:
            f = data[5]<<16 + data[4]<<8 + data[3]    # freq 1
+           print  data[8], data[7], data[6]
         elif freq_no == 2:
            f = data[8]<<16 + data[7]<<8 + data[6]    # freq 2
         elif freq_no == 3:
@@ -202,10 +228,10 @@ class settings_page(ProtectedPage):
     """Load an html page for entering adjustments."""
 
     def GET(self):
-        return self.plugin_render.tank_humi_monitor(options, log.events(NAME))
+        return self.plugin_render.tank_humi_monitor(tank_options, log.events(NAME))
 
     def POST(self):
-        options.web_update(web.input())
+        tank_options.web_update(web.input())
 
         if sender is not None:
             sender.update()
@@ -218,5 +244,5 @@ class settings_json(ProtectedPage):
     def GET(self):
         web.header('Access-Control-Allow-Origin', '*')
         web.header('Content-Type', 'application/json')
-        return json.dumps(options)
+        return json.dumps(tank_options)
 
