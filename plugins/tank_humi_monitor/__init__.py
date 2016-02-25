@@ -45,8 +45,9 @@ tank_options = PluginOptions(
     }
 )
 
-bus = smbus.SMBus(1)
-address = 0x04 # device address for humi and ping plugin HW board
+bus = smbus.SMBus(1)# Raspberry Pi I2C bus 0 for old RPi, 1 for new RPi
+address_ping = 0x04 # device address for sonic ping HW board
+address_humi = 0x05 # device address for humidity HW board
 
 ################################################################################
 # Main function loop:                                                          #
@@ -163,7 +164,7 @@ def stop():
 def get_sonic_cm():
     try:
         data = [2]
-        data = bus.read_i2c_block_data(address,2)
+        data = bus.read_i2c_block_data(address_ping,2)
         cm = data[1] + data[2]*255
         return cm
     except:
@@ -182,25 +183,25 @@ def get_sonic_tank_cm():
 
 def get_freq(freq_no):
     try:
-        data = [26]
-        data = bus.read_i2c_block_data(address,26)
+        data = [24]
+        data = bus.read_i2c_block_data(address_humi,24)
         if freq_no == 1:
-           f = data[5]<<16 + data[4]<<8 + data[3]    # freq 1
+           f = data[3]<<16 + data[2]<<8 + data[1]    # freq 1
            print  data[8], data[7], data[6]
         elif freq_no == 2:
-           f = data[8]<<16 + data[7]<<8 + data[6]    # freq 2
+           f = data[6]<<16 + data[5]<<8 + data[4]    # freq 2
         elif freq_no == 3:
-           f = data[11]<<16 + data[10]<<8 + data[9]  # freq 3
+           f = data[9]<<16 + data[8]<<8 + data[7]  # freq 3
         elif freq_no == 4:
-           f = data[14]<<16 + data[13]<<8 + data[12] # freq 4
+           f = data[12]<<16 + data[11]<<8 + data[10] # freq 4
         elif freq_no == 5:
-           f = data[17]<<16 + data[16]<<8 + data[15] # freq 5
+           f = data[15]<<16 + data[14]<<8 + data[13] # freq 5
         elif freq_no == 6:
-           f = data[20]<<16 + data[19]<<8 + data[18] # freq 6
+           f = data[18]<<16 + data[17]<<8 + data[16] # freq 6
         elif freq_no == 7:
-           f = data[23]<<16 + data[22]<<8 + data[21] # freq 7
+           f = data[21]<<16 + data[20]<<8 + data[19] # freq 7
         elif freq_no == 8:
-           f = data[26]<<16 + data[25]<<8 + data[24] # freq 8
+           f = data[24]<<16 + data[23]<<8 + data[22] # freq 8
         else:
            f = -2
         return f
