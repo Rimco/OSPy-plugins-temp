@@ -124,7 +124,28 @@ class Sender(Thread):
 
                        
                 if tank_options['use_freq_1']:
-                    print get_freq(1), get_freq(2), get_freq(3), get_freq(4), get_freq(5), get_freq(6), get_freq(7), get_freq(8)
+                    log.info(NAME, 'F1 ' + str(get_freq(1)) + ' Hz.')
+     
+                if tank_options['use_freq_2']:
+                    log.info(NAME, 'F2 ' + str(get_freq(2)) + ' Hz.')
+  
+                if tank_options['use_freq_3']:
+                    log.info(NAME, 'F3 ' + str(get_freq(3)) + ' Hz.')
+
+                if tank_options['use_freq_4']:
+                    log.info(NAME, 'F4 ' + str(get_freq(4)) + ' Hz.')
+
+                if tank_options['use_freq_5']:
+                    log.info(NAME, 'F5 ' + str(get_freq(5)) + ' Hz.')
+
+                if tank_options['use_freq_6']:
+                    log.info(NAME, 'F6 ' + str(get_freq(6)) + ' Hz.')
+
+                if tank_options['use_freq_7']:
+                    log.info(NAME, 'F7 ' + str(get_freq(7)) + ' Hz.')
+
+                if tank_options['use_freq_8']:
+                    log.info(NAME, 'F8 ' + str(get_freq(8)) + ' Hz.')
 
                 if send:
                     TEXT = (datetime_string() + '\nSystem detected error: Water Tank has minimum Water Level: ' + str(tank_options['water_minimum']) + 'cm.\nScheduler is now disabled and all Stations turn Off.')
@@ -136,7 +157,7 @@ class Sender(Thread):
                     except Exception as err:
                         log.error(NAME, 'Email was not sent! ' + str(err))
 
-                self._sleep(5)
+                self._sleep(5) # 5 for tested 60 for default
 
             except Exception:
                 log.error(NAME, 'Water tank and humidity Monitor plug-in:\n' + traceback.format_exc())
@@ -178,37 +199,45 @@ def get_sonic_tank_cm():
         if tank_cm > 0:
            return tank_cm
         else:
-           return 0
+           return 0 
     except:
-        return -1
+        return -1 # if I2C device not exists
 
 def get_freq(freq_no):
     try:
         data = [24]
         data = bus.read_i2c_block_data(address_humi,24)
         if freq_no == 1:
-           f = data[2]<<16 + data[1]<<8 + data[0]    # freq 1
-           print  data[2], data[1], data[0]
+           f = data[2] + (data[1]<<8) + (data[0]<<16)    # freq 1
+           #print  data[2], data[1], data[0]
+
         elif freq_no == 2:
-           f = data[5]<<16 + data[4]<<8 + data[3]    # freq 2
+           f = data[5] + (data[4]<<8) + (data[3]<<16)    # freq 2
+
         elif freq_no == 3:
-           f = data[8]<<16 + data[7]<<8 + data[6]    # freq 3
+           f = data[8] + (data[7]<<8) + (data[6]<<16)    # freq 3
+
         elif freq_no == 4:
-           f = data[11]<<16 + data[10]<<8 + data[9]  # freq 4
+           f = data[11] + (data[10]<<8) + (data[9]<<16)  # freq 4
+
         elif freq_no == 5:
-           f = data[14]<<16 + data[13]<<8 + data[12] # freq 5
+           f = data[14] + (data[13]<<8) + (data[12]<<16) # freq 5
+
         elif freq_no == 6:
-           f = data[17]<<16 + data[16]<<8 + data[15] # freq 6
+           f = data[17] + (data[16]<<8) + (data[15]<<16) # freq 6
+
         elif freq_no == 7:
-           f = data[20]<<16 + data[19]<<8 + data[18] # freq 7
+           f = data[20] + (data[19]<<8) + (data[18]<<16) # freq 7
+
         elif freq_no == 8:
-           f = data[23]<<16 + data[22]<<8 + data[21] # freq 8
+           f = data[23] + (data[22]<<8) + (data[21]<<16) # freq 8
+
         else:
            f = -2
         return f
 
     except:
-        return -1           
+        return -1 # if I2C device not exists          
 
 def maping(x, in_min, in_max, out_min, out_max):
     # return value from map. example (x=1023,0,1023,0,100) -> x=1023 return 100
