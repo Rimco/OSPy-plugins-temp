@@ -79,7 +79,6 @@ class Sender(Thread):
         two_text = True
         send = False
         mini = True
-        last_level = 0
         
         while not self._stop.is_set():
             try:
@@ -92,13 +91,7 @@ class Sender(Thread):
 
                     level_in_tank = get_sonic_tank_cm()
 
-                    if level_in_tank != last_level: # only if level is changed +-1cm
-                        log.clear(NAME)
-                        last_level = level_in_tank
-                        if level_in_tank == -1:
-                            log.info(NAME, datetime_string() + ' Water level sensor is faulty!')
-                        else:
-                            log.info(NAME, datetime_string() + ' Water level: ' + str(level_in_tank) + ' cm.')
+                    log.info(NAME, datetime_string() + ' Water level: ' + str(level_in_tank) + ' cm.')
 
                     if level_in_tank <= int(tank_options['water_minimum']) and mini and not options.manual_mode and level_in_tank > -1:
                         
@@ -120,32 +113,68 @@ class Sender(Thread):
                        log.info(NAME, 'Water tank monitor is disabled.')
                        once_text = False
                        two_text = True
-                       last_level = 0
-
-                       
+                       last_level = 0                
+ 
                 if tank_options['use_freq_1']:
-                    log.info(NAME, 'F1 ' + str(get_freq(1)) + ' Hz.')
+                    humi1 = get_freq(1)
+                    humi1_lvl = maping(humi1,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                    if humi1_lvl > 100:
+                       humi1_lvl = -1 
+                    log.info(NAME, datetime_string() + ' F1: ' + str(humi1) + 'Hz H: ' + str(humi1_lvl) + '%.' )
+
      
                 if tank_options['use_freq_2']:
-                    log.info(NAME, 'F2 ' + str(get_freq(2)) + ' Hz.')
+                    humi2 = get_freq(2)
+                    humi2_lvl = maping(humi2,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                    if humi2_lvl > 100:
+                       humi2_lvl = -1
+                    log.info(NAME, datetime_string() + ' F2: ' + str(humi2) + 'Hz H: ' + str(humi2_lvl) + '%.' )
+
   
                 if tank_options['use_freq_3']:
-                    log.info(NAME, 'F3 ' + str(get_freq(3)) + ' Hz.')
+                    humi3 = get_freq(3)
+                    humi3_lvl = maping(humi3,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                    if humi3_lvl > 100:
+                       humi3_lvl = -1
+                    log.info(NAME, datetime_string() + ' F3: ' + str(humi3) + 'Hz H: ' + str(humi3_lvl) + '%.' )
 
                 if tank_options['use_freq_4']:
-                    log.info(NAME, 'F4 ' + str(get_freq(4)) + ' Hz.')
+                    humi4 = get_freq(4)
+                    humi4_lvl = maping(humi4,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                    if humi4_lvl > 100:
+                       humi4_lvl = -1
+                    log.info(NAME, datetime_string() + ' F4: ' + str(humi4) + 'Hz H: ' + str(humi4_lvl) + '%.' )
+
 
                 if tank_options['use_freq_5']:
-                    log.info(NAME, 'F5 ' + str(get_freq(5)) + ' Hz.')
+                    humi5 = get_freq(5)
+                    humi5_lvl = maping(humi5,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                    if humi5_lvl > 100:
+                       humi5_lvl = -1
+                    log.info(NAME, datetime_string() + ' F5: ' + str(humi5) + 'Hz H: ' + str(humi5_lvl) + '%.' )
+
 
                 if tank_options['use_freq_6']:
-                    log.info(NAME, 'F6 ' + str(get_freq(6)) + ' Hz.')
+                    humi6 = get_freq(6)
+                    humi6_lvl = maping(humi6,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                    if humi6_lvl > 100:
+                       humi6_lvl = -1
+                    log.info(NAME, datetime_string() + ' F6: ' + str(humi6) + 'Hz H: ' + str(humi6_lvl) + '%.' )
 
                 if tank_options['use_freq_7']:
-                    log.info(NAME, 'F7 ' + str(get_freq(7)) + ' Hz.')
+                    humi7 = get_freq(7)
+                    humi7_lvl = maping(humi3,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                    if humi7_lvl > 100:
+                       humi7_lvl = -1
+                    log.info(NAME, datetime_string() + ' F7: ' + str(humi7) + 'Hz H: ' + str(humi7_lvl) + '%.' )
+
 
                 if tank_options['use_freq_8']:
-                    log.info(NAME, 'F8 ' + str(get_freq(8)) + ' Hz.')
+                    humi8 = get_freq(8)
+                    humi8_lvl = maping(humi8,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                    if humi8_lvl > 100:
+                       humi8_lvl = -1
+                    log.info(NAME, datetime_string() + ' F8: ' + str(humi8) + 'Hz H: ' + str(humi8_lvl) + '%.' )
 
                 if send:
                     TEXT = (datetime_string() + '\nSystem detected error: Water Tank has minimum Water Level: ' + str(tank_options['water_minimum']) + 'cm.\nScheduler is now disabled and all Stations turn Off.')
@@ -157,7 +186,8 @@ class Sender(Thread):
                     except Exception as err:
                         log.error(NAME, 'Email was not sent! ' + str(err))
 
-                self._sleep(5) # 5 for tested 60 for default
+                self._sleep(60) # 5 for tested 60 for default
+                log.clear(NAME)
 
             except Exception:
                 log.error(NAME, 'Water tank and humidity Monitor plug-in:\n' + traceback.format_exc())
