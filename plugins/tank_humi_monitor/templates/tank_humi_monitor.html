@@ -19,15 +19,15 @@ $var page: plugins
 
 <div id="plugin">
     <div class="title">Water tank and humidity monitor settings</div>
-    <p>This plugin check water level in water tank via ultrasonic sensor.</p>
+    <p>This plugin check water level in water tank via ultrasonic sensor (I2C address 0x04).</p>
     <p>If water level is small plugins stop irigation system and sends email with error. Prevent safety for master station pump.</p>
-	<p>This plugin check humidity on the 8 sensors for 8 stations and adjusts run time for stations according to moisture.</p>
+	<p>This plugin check humidity on the 8 sensors for 8 stations and adjusts run time for stations according to moisture (I2C address 0x05).</p>
     <form id="pluginForm" action="$plugins.plugin_url('tank_humi_monitor.settings_page')" method="post">
         <table class="optionList">
             <tr>
                 <td style='text-transform: none;'>Use ultrasonic measuring the water level in the tank:</td>
                 <td>
-                    <input name='use_sonic' type='checkbox'${" checked" if plugin_options['use_sonic'] else ""}> 
+                    <input name='use_sonic' type='checkbox'${" checked" if plugin_options['use_sonic'] else ""}> I2C address 0x04
                 </td>
             </tr>
             <tr>
@@ -55,49 +55,49 @@ $var page: plugins
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use measuring frequenci probe 1:</td>
+                <td style='text-transform: none;'>Use measuring frequenci probe 1:</td> 
                 <td>
-                    <input name='use_freq_1' type='checkbox'${" checked" if plugin_options['use_freq_1'] else ""}>
+                    <input name='use_freq_1' type='checkbox'${" checked" if plugin_options['use_freq_1'] else ""}> All probe I2C address 0x05
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use measuring frequenci probe 2:</td>
+                <td style='text-transform: none;'>Use measuring frequenci probe 2:</td> 
                 <td>
                     <input name='use_freq_2' type='checkbox'${" checked" if plugin_options['use_freq_2'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use measuring frequenci probe 3:</td>
+                <td style='text-transform: none;'>Use measuring frequenci probe 3:</td> 
                 <td>
                     <input name='use_freq_3' type='checkbox'${" checked" if plugin_options['use_freq_3'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use measuring frequenci probe 4:</td>
+                <td style='text-transform: none;'>Use measuring frequenci probe 4:</td> 
                 <td>
                     <input name='use_freq_4' type='checkbox'${" checked" if plugin_options['use_freq_4'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use measuring frequenci probe 5:</td>
+                <td style='text-transform: none;'>Use measuring frequenci probe 5:</td> 
                 <td>
                     <input name='use_freq_5' type='checkbox'${" checked" if plugin_options['use_freq_5'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use measuring frequenci probe 6:</td>
+                <td style='text-transform: none;'>Use measuring frequenci probe 6:</td> 
                 <td>
                     <input name='use_freq_6' type='checkbox'${" checked" if plugin_options['use_freq_6'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use measuring frequenci probe 7:</td>
+                <td style='text-transform: none;'>Use measuring frequenci probe 7:</td> 
                 <td>
                     <input name='use_freq_7' type='checkbox'${" checked" if plugin_options['use_freq_7'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use measuring frequenci probe 8:</td>
+                <td style='text-transform: none;'>Use measuring frequenci probe 8:</td> 
                 <td>
                     <input name='use_freq_8' type='checkbox'${" checked" if plugin_options['use_freq_8'] else ""}>
                 </td>
@@ -117,7 +117,7 @@ $var page: plugins
             <tr>
                 <td style='text-transform: none;'>Status:</td>
                 <td>
-                    <textarea style="font-family: monospace;" rows="7" cols="35" readonly>$'\n'.join(events)</textarea>
+                    <textarea style="font-family: monospace;" rows="7" cols="40" readonly>$'\n'.join(events)</textarea>
                 </td>
             </tr>
         </table>
