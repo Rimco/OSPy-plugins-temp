@@ -36,9 +36,9 @@ Server setup
   <a href="/plugins/remote_notifications/static/images/web.png"><img src="/plugins/remote_notifications/static/images/web.png" width="100%"></a>
 * In file save.php we type own API key same as use this plugin.
 * in file connect.php we type:  
-  $server="address SQL server";   
-  $user="user name SQL server";  
-  $pass="password SQL server";  
-  $db="ospy"; // name of table on the SQL server
+  server="address SQL server"   
+  user="user name SQL server"  
+  pass="password SQL server" 
+  db="ospy" name of table on the SQL server
   
   
