@@ -9,7 +9,7 @@ import os
 import os.path
 import traceback
 import urllib2             
-import urllib
+import re
 from threading import Thread, Event
 
 import web
@@ -129,22 +129,28 @@ class RemoteSender(Thread):
                            send_msg = True
                            en_rain = False
 
+                    if not options.rain_sensor_enabled: # if rain sensor not used
+                        rain = ""
+                                        
                     ### program and station ###
-                    finished = [run for run in log.finished_runs() if not run['blocked']]
+                    finished = [run for run in log.finished_runs() if not run['blocked']]                    
                     if len(finished) > finished_count:
-                        lastrun = datetime_string()
+                        las = datetime_string()
+                        lastrun = re.sub(" ", "_", las) # eliminate gap in the title to _
                         send_msg = True
                         ### humidity in station ###
                         try:
                             from plugins import tank_humi_monitor
-                            humi = tank_humi_monitor.get_humidity(stations.get(run['station']))
+                            humi = tank_humi_monitor.get_humidity((stations.get(run['station']).index)+1) # 0-7 to 1-8 humidity
+                            print humi  
                         except Exception:
                             humi = ""
    
                         for run in finished[finished_count:]:
                             dur = (run['end'] - run['start']).total_seconds()
                             minutes, seconds = divmod(dur, 60)
-                            station = "%s" % stations.get(run['station']).name
+                            sta = "%s" % stations.get(run['station']).name 
+                            station = re.sub(" ", "_", sta)  # eliminate gap in the title to _
                             duration = "%02d:%02d" % (minutes, seconds)                       
 
                     finished_count = len(finished)
@@ -154,7 +160,7 @@ class RemoteSender(Thread):
                     body += ('&rain=' + str(rain))
                     body += ('&humi=' + str(humi))
                     body += ('&line=' + str(line))
-                    body += ('&lastrun=' + str(lastrun))
+                    body += ('&lastrun=' + str(lastrun)) 
                     body += ('&station=' + str(station))
                     body += ('&duration=' + str(duration))
                     body += ('&api=' + remote_options['api'])  # API password
