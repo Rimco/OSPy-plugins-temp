@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Pihrt'
 # This plugin read data (temp or voltage) from I2C PCF8591 on adress 0x48. For temperature probe use LM35D (LM35DZ). 
 
 import json
