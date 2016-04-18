@@ -1,6 +1,7 @@
 # !/usr/bin/env python
-# this plugins enable or disable watchdog 
-
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Pihrt'
+# this plugins enable or disable system RPi HW watchdog 
 
 from threading import Thread, Event
 import time
