@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Pihrt'
 # This plugin sends data to I2C for LCD 16x2 or 16x1 char with PCF8574.
 # Visit for more: www.pihrt.com/elektronika/258-moje-rapsberry-pi-i2c-lcd-16x2.
 # This plugin requires python pylcd2.py library
