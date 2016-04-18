@@ -1,4 +1,6 @@
 # !/usr/bin/env python
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Pihrt'
 # this plugins send and check SMS data for modem to control your OSPy
 
 from threading import Thread, Event
