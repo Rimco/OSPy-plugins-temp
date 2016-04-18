@@ -11,3 +11,4 @@ Plugin setup
 * Check Use Button:
 
 not function plugin ... comming soon ...
+# not ready function version!!! - not use #
