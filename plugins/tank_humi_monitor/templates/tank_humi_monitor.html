@@ -21,7 +21,7 @@ $var page: plugins
     <div class="title">Water tank and humidity monitor settings</div>
     <p>This plugin check water level in water tank via ultrasonic sensor (I2C address 0x04).</p>
     <p>If water level is small plugins stop irigation system and sends email with error. Prevent safety for master station pump.</p>
-	<p>This plugin check humidity on the 8 sensors for 8 stations and adjusts run time for stations according to moisture (I2C address 0x05).</p>
+	<p>This plugin check humidity on the 8 sensors for 8 stations and (TODO not ready: adjusts run time for stations according to moisture (I2C address 0x05) ).</p>
     <form id="pluginForm" action="$plugins.plugin_url('tank_humi_monitor.settings_page')" method="post">
         <table class="optionList">
             <tr>
