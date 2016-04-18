@@ -1,4 +1,6 @@
 # !/usr/bin/env python
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Pihrt'
 # This plugin use library rtc_DS1307
 
 
