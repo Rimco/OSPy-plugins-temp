@@ -29,7 +29,7 @@ Note: For this plugin we need a public web server with PHP support and access to
 Server setup
 -----------  
 * On the Web server will place these files (after unpacking the zip file).  
-  <a href="/plugins/remote_notifications/static/automatOSPy.zip">download automatOSPy.zip files</a>
+  <a href="https://github.com/martinpihrt/OSPy-PHPfile/archive/master.zip">download automatOSPy.zip files</a>
 * On the SQL server we create new database with new table: ospy as in imagge:  
   <a href="/plugins/remote_notifications/static/images/sql.png"><img src="/plugins/remote_notifications/static/images/sql.png" width="100%"></a>
 * On the WEB server we places files as in imagge:  
