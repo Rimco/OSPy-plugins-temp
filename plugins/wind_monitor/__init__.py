@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Pihrt'
 # This plugins check wind speed in meter per second. 
 # This plugin read data from I2C counter PCF8583 on I2C address 0x50. Max count PCF8583 is 1 milion pulses per seconds
-
 
 import json
 import time
@@ -81,10 +82,13 @@ class WindSender(Thread):
         l = [] # list 10 measures
         x = 1  # index of list  
         avg_puls = 0 # average pulses
-        log.info(NAME,'Please wait 10 sec...')
+        disable_text = True
+
         while not self._stop.is_set():
             try:
                 if self.bus is not None and wind_options['use_wind_monitor']:  # if wind plugin is enabled
+                    disable_text = True
+                    log.info(NAME,'Please wait 10 sec...')
                     while x <= 10:
                        puls = counter(self.bus)
                        l.append(puls)
@@ -101,6 +105,7 @@ class WindSender(Thread):
                     self.status['meter'] = round(val,2)
                     self.status['kmeter'] = round(val*3.6,2)
                     log.clear(NAME)
+                    log.info(NAME,'Please wait 10 sec...')
                     log.info(NAME,'Average m/sec: ' + str(round(val,2)))
                     log.info(NAME,'Average pulses/sec: ' + str(avg_puls))
                    
@@ -115,11 +120,11 @@ class WindSender(Thread):
                              send = True                    
                                       
                 else:
-                        # text on the web if plugin is disabled
-                        log.clear(NAME)
-                        log.info(NAME, 'Wind speed monitor plug-in is disabled.')
-                        self._sleep(3600)
-                        
+                    # text on the web if plugin is disabled
+                    if disable_text:  
+                       log.clear(NAME)
+                       log.info(NAME, 'Wind speed monitor plug-in is disabled.')
+                       disable_text = False                        
 
                 if send:
                     TEXT = (datetime_string() + ': System detected error: wind speed monitor. All stations set to OFF. Wind is: ' + str(round(val*3.6,2)) + ' km/h.' )
