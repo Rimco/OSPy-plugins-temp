@@ -90,23 +90,26 @@ class Sender(Thread):
                         two_text = False
 
                     level_in_tank = get_sonic_tank_cm()
+                    
+                    if level_in_tank >= 0: # if I2C device exists
+                        log.info(NAME, datetime_string() + ' Water level: ' + str(level_in_tank) + ' cm.')
 
-                    log.info(NAME, datetime_string() + ' Water level: ' + str(level_in_tank) + ' cm.')
-
-                    if level_in_tank <= int(tank_options['water_minimum']) and mini and not options.manual_mode and level_in_tank > -1:
+                        if level_in_tank <= int(tank_options['water_minimum']) and mini and not options.manual_mode and level_in_tank > -1:
                         
-                        if tank_options['use_send_email']: 
-                            send = True
-                            mini = False 
+                            if tank_options['use_send_email']: 
+                               send = True
+                               mini = False 
     
-                        log.info(NAME, datetime_string() + ' ERROR: Water in Tank < ' + str(tank_options['water_minimum']) + ' cm! ')
-                        options.scheduler_enabled = False                  # disable scheduler
-                        log.finish_run(None)                               # save log
-                        stations.clear()                                   # set all station to off  
+                            log.info(NAME, datetime_string() + ' ERROR: Water in Tank < ' + str(tank_options['water_minimum']) + ' cm! ')
+                            options.scheduler_enabled = False                  # disable scheduler
+                            log.finish_run(None)                               # save log
+                            stations.clear()                                   # set all station to off  
                                           
 
-                    if level_in_tank > int(tank_options['water_minimum']) + 5 and not mini: 
-                        mini = True
+                        if level_in_tank > int(tank_options['water_minimum']) + 5 and not mini: 
+                            mini = True
+                    else:
+                        log.info(NAME, datetime_string() + ' Water level: Error I2C device not found.')
                 
                 else:
                     if once_text:
@@ -117,64 +120,83 @@ class Sender(Thread):
  
                 if tank_options['use_freq_1']:
                     humi1 = get_freq(1)
-                    humi1_lvl = maping(humi1,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-                    if humi1_lvl > 100:
-                       humi1_lvl = -1 
-                    log.info(NAME, datetime_string() + ' F1: ' + str(humi1) + 'Hz H: ' + str(humi1_lvl) + '%.' )
-
-     
+                    if humi1 >= 0:
+                       humi1_lvl = maping(humi1,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       if humi1_lvl >= 100:
+                          humi1_lvl = 100 
+                       log.info(NAME, datetime_string() + ' F1: ' + str(humi1) + 'Hz H: ' + str(humi1_lvl) + '%.' )
+                    else:
+                       log.info(NAME, datetime_string() + ' F1: Error I2C device not found.')
+                      
                 if tank_options['use_freq_2']:
                     humi2 = get_freq(2)
-                    humi2_lvl = maping(humi2,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-                    if humi2_lvl > 100:
-                       humi2_lvl = -1
-                    log.info(NAME, datetime_string() + ' F2: ' + str(humi2) + 'Hz H: ' + str(humi2_lvl) + '%.' )
-
+                    if humi2 >= 0:
+                       humi2_lvl = maping(humi2,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       if humi2_lvl >= 100:
+                          humi2_lvl = 100
+                       log.info(NAME, datetime_string() + ' F2: ' + str(humi2) + 'Hz H: ' + str(humi2_lvl) + '%.' )
+                    else:
+                       log.info(NAME, datetime_string() + ' F2: Error I2C device not found.')
   
                 if tank_options['use_freq_3']:
                     humi3 = get_freq(3)
-                    humi3_lvl = maping(humi3,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-                    if humi3_lvl > 100:
-                       humi3_lvl = -1
-                    log.info(NAME, datetime_string() + ' F3: ' + str(humi3) + 'Hz H: ' + str(humi3_lvl) + '%.' )
+                    if humi3 >= 0:
+                       humi3_lvl = maping(humi3,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       if humi3_lvl >= 100:
+                          humi3_lvl = 100
+                       log.info(NAME, datetime_string() + ' F3: ' + str(humi3) + 'Hz H: ' + str(humi3_lvl) + '%.' )
+                    else:
+                       log.info(NAME, datetime_string() + ' F3: Error I2C device not found.')
 
                 if tank_options['use_freq_4']:
                     humi4 = get_freq(4)
-                    humi4_lvl = maping(humi4,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-                    if humi4_lvl > 100:
-                       humi4_lvl = -1
-                    log.info(NAME, datetime_string() + ' F4: ' + str(humi4) + 'Hz H: ' + str(humi4_lvl) + '%.' )
-
+                    if humi4 >= 0:
+                       humi4_lvl = maping(humi4,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       if humi4_lvl >= 100:
+                          humi4_lvl = 100
+                       log.info(NAME, datetime_string() + ' F4: ' + str(humi4) + 'Hz H: ' + str(humi4_lvl) + '%.' )
+                    else:
+                       log.info(NAME, datetime_string() + ' F4: Error I2C device not found.')
 
                 if tank_options['use_freq_5']:
                     humi5 = get_freq(5)
-                    humi5_lvl = maping(humi5,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-                    if humi5_lvl > 100:
-                       humi5_lvl = -1
-                    log.info(NAME, datetime_string() + ' F5: ' + str(humi5) + 'Hz H: ' + str(humi5_lvl) + '%.' )
-
+                    if humi5 >= 0:
+                       humi5_lvl = maping(humi5,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       if humi5_lvl >= 100:
+                          humi5_lvl = 100
+                       log.info(NAME, datetime_string() + ' F5: ' + str(humi5) + 'Hz H: ' + str(humi5_lvl) + '%.' )
+                    else:
+                       log.info(NAME, datetime_string() + ' F5: Error I2C device not found.')
 
                 if tank_options['use_freq_6']:
                     humi6 = get_freq(6)
-                    humi6_lvl = maping(humi6,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-                    if humi6_lvl > 100:
-                       humi6_lvl = -1
-                    log.info(NAME, datetime_string() + ' F6: ' + str(humi6) + 'Hz H: ' + str(humi6_lvl) + '%.' )
+                    if humi6 >= 0:
+                       humi6_lvl = maping(humi6,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       if humi6_lvl >= 100:
+                          humi6_lvl = 100
+                       log.info(NAME, datetime_string() + ' F6: ' + str(humi6) + 'Hz H: ' + str(humi6_lvl) + '%.' )
+                    else:
+                       log.info(NAME, datetime_string() + ' F6: Error I2C device not found.')
 
                 if tank_options['use_freq_7']:
                     humi7 = get_freq(7)
-                    humi7_lvl = maping(humi3,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-                    if humi7_lvl > 100:
-                       humi7_lvl = -1
-                    log.info(NAME, datetime_string() + ' F7: ' + str(humi7) + 'Hz H: ' + str(humi7_lvl) + '%.' )
-
+                    if humi7 >= 0:
+                       humi7_lvl = maping(humi3,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       if humi7_lvl >= 100:
+                          humi7_lvl = 100
+                       log.info(NAME, datetime_string() + ' F7: ' + str(humi7) + 'Hz H: ' + str(humi7_lvl) + '%.' )
+                    else:
+                       log.info(NAME, datetime_string() + ' F7: Error I2C device not found.')
 
                 if tank_options['use_freq_8']:
                     humi8 = get_freq(8)
-                    humi8_lvl = maping(humi8,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-                    if humi8_lvl > 100:
-                       humi8_lvl = -1
-                    log.info(NAME, datetime_string() + ' F8: ' + str(humi8) + 'Hz H: ' + str(humi8_lvl) + '%.' )
+                    if humi8 >= 0:
+                       humi8_lvl = maping(humi8,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       if humi8_lvl >= 100:
+                          humi8_lvl = 100
+                       log.info(NAME, datetime_string() + ' F8: ' + str(humi8) + 'Hz H: ' + str(humi8_lvl) + '%.' )
+                    else:
+                       log.info(NAME, datetime_string() + ' F8: Error I2C device not found.')
 
                 if send:
                     TEXT = (datetime_string() + '\nSystem detected error: Water Tank has minimum Water Level: ' + str(tank_options['water_minimum']) + 'cm.\nScheduler is now disabled and all Stations turn Off.')
@@ -186,7 +208,7 @@ class Sender(Thread):
                     except Exception as err:
                         log.error(NAME, 'Email was not sent! ' + str(err))
 
-                self._sleep(60) # 5 for tested 60 for default
+                self._sleep(10) # 2 for tested 
                 log.clear(NAME)
 
             except Exception:
@@ -225,9 +247,13 @@ def get_sonic_cm():
 def get_sonic_tank_cm():
     try:
         cm = get_sonic_cm()
+        if tank_cm < 0:
+           return -1
+ 
         tank_cm = maping(cm,int(tank_options['distance_bottom']),int(tank_options['distance_top']),int(tank_options['distance_top']),int(tank_options['distance_bottom']))
-        if tank_cm > 0:
+        if tank_cm >= 0:
            return tank_cm
+
         else:
            return 0 
     except:
@@ -264,10 +290,27 @@ def get_freq(freq_no):
 
         else:
            f = -2
-        return f
+        return f  # if channel freq >8 or <1 not exists 
 
     except:
-        return -1 # if I2C device not exists          
+        return -1 # if I2C device not exists   
+
+def get_humidity(channel): # return humidity 0-100% for channel 1-8
+    hum = get_freq(channel)
+    hum_lvl = maping(hum,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+    if hum_lvl >= 100:
+       hum_lvl = 100 
+    if hum_lvl <= 0:
+       hum_lvl = 0
+    return hum_lvl
+
+def get_tank(): # return water tank level 0-100%, -1 is error i2c not found
+    tank_lvl = get_sonic_tank_cm()
+    if tank_lvl >= 0:
+       tank_proc = maping(tank_lvl,int(tank_options['distance_bottom']),int(tank_options['distance_top']),0,100) 
+       return tank_proc
+    else:
+       return -1
 
 def maping(x, in_min, in_max, out_min, out_max):
     # return value from map. example (x=1023,0,1023,0,100) -> x=1023 return 100
