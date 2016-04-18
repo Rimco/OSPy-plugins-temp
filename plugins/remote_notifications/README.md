@@ -4,6 +4,7 @@ Remote Notifications Readme
 This plugin can send Notifications on the Remote Webserver. This plugin requre SQL server and Webserver with PHP.  
 This plugin send data as get command to remote PHP web pages.  
 This plugin requred correct settings this plugins: UPS Monitor, Tank Humi Monitor.  
+If I not have a public IP address, or for some reason can not connect directly to OSPy I use this plugin for display on the site, which is accessible from the Internet.
 
 Plugin setup
 -----------
