@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Pihrt'
 # This plugin controls OpenSprinkler via 8 buttons. I2C controller MCP23017 on 0x27 address. 
+
+# not ready function version!!! - not use #
 
 import time
 import traceback
