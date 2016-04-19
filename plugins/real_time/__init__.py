@@ -69,8 +69,8 @@ class RealTimeChecker(Thread):
             ntp_time = None  
 
             try:
-                log.clear(NAME)
                 if plugin_options['enabled']:
+                    log.clear(NAME)
                     dis_text = True
                     log.info(NAME, 'Local time: ' + datetime_string())
                     try:                                                                 # try use library rtc_DS1307
