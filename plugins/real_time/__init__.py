@@ -63,6 +63,7 @@ class RealTimeChecker(Thread):
             self._sleep_time -= 1
 
     def run(self):
+        dis_text = True
         while not self._stop.is_set():
             rtc_time = None
             ntp_time = None  
@@ -70,6 +71,7 @@ class RealTimeChecker(Thread):
             try:
                 log.clear(NAME)
                 if plugin_options['enabled']:
+                    dis_text = True
                     log.info(NAME, 'Local time: ' + datetime_string())
                     try:                                                                 # try use library rtc_DS1307
                        ds1307 = rtc_DS1307.rtc_DS1307(1)
@@ -129,9 +131,10 @@ class RealTimeChecker(Thread):
                     self._sleep(3600)
 
                 else:
-                    log.clear(NAME)
-                    log.info(NAME, 'Plug-in is disabled.')
-                    self._sleep(24*3600)
+                    if dis_text:
+                        log.clear(NAME)
+                        log.info(NAME, 'Plug-in is disabled.')
+                        dis_text = False
 
             except Exception:
                 log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
@@ -164,11 +167,14 @@ def getNTPtime():
 
     t = struct.unpack( "!12I", msg )[10]
     t -= TIME1970
-    t = datetime.datetime.strptime(time.ctime(t), "%a %b %d %H:%M:%S %Y")
-    return t
+    try:
+        t = datetime.datetime.strptime(time.ctime(t), "%a %b %d %H:%M:%S %Y")
+        return t
+    except Exception:    
+        return None
     
-
-
+    
+    
 def start():
     global checker
     if checker is None:
