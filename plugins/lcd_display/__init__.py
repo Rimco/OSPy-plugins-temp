@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = 'Martin Pihrt'
@@ -197,7 +198,10 @@ def get_report(index):
             from plugins import tank_humi_monitor
 
             cm = tank_humi_monitor.get_sonic_tank_cm()
-            result = str(cm) + ' cm'
+            if cm > 0: 
+               result = str(cm) + ' cm'
+            else:
+               result = "Error - I2C device not found!"
 
         except Exception:
             result = "Not available"
