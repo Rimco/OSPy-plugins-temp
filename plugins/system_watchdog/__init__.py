@@ -7,14 +7,13 @@ from threading import Thread, Event
 import time
 import subprocess
 import os
-import re
 import sys
 import traceback
 
 import web
 from ospy import helpers
 from ospy.options import options
-from ospy.helpers import restart
+from ospy.helpers import restart, ASCI_convert
 from ospy.webpages import ProtectedPage
 from ospy.log import log
 from plugins import plugin_url
@@ -111,14 +110,17 @@ def stop():
         checker = None
 
 def run_process(cmd):
-    proc = subprocess.Popen(
-        cmd,
-        stderr=subprocess.STDOUT, # merge stdout and stderr
-        stdout=subprocess.PIPE,
-        shell=True)
-    output = proc.communicate()[0]
-    text = re.sub('\x1b[^m]*m', '', output) 
-    log.info(NAME, text)
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            stderr=subprocess.STDOUT, # merge stdout and stderr
+            stdout=subprocess.PIPE,
+            shell=True)
+        output = proc.communicate()[0]
+        log.info(NAME, 'System watchodg plug-in:\n' + ASCI_convert(output))
+
+    except:
+        log.info(NAME, 'System watchodg plug-in: Error in Converting')
 
 
 ################################################################################
