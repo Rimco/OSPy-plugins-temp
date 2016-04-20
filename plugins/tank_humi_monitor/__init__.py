@@ -297,12 +297,15 @@ def get_freq(freq_no):
 
 def get_humidity(channel): # return humidity 0-100% for channel 1-8
     hum = get_freq(channel)
-    hum_lvl = maping(hum,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
-    if hum_lvl >= 100:
-       hum_lvl = 100 
-    if hum_lvl <= 0:
-       hum_lvl = 0
-    return hum_lvl
+    if hum < 0:
+       return -1 #if I2C device not exists
+    else:
+       hum_lvl = maping(hum,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+       if hum_lvl >= 100: # max value
+          hum_lvl = 100 
+       if hum_lvl <= 0: # min value
+          hum_lvl = 0 
+       return hum_lvl
 
 def get_tank(): # return water tank level 0-100%, -1 is error i2c not found
     tank_lvl = get_sonic_tank_cm()
