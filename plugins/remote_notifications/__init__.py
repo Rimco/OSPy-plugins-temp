@@ -88,7 +88,7 @@ class RemoteSender(Thread):
         while not self._stop.is_set():
             try:
                
-                # Send data if rain detected a new finished run is found
+                # Send data if rain detected, power line state a new finished run is found
                 if remote_options["use"]:   
                     ### water tank level ###
                     try:
@@ -141,8 +141,10 @@ class RemoteSender(Thread):
                         ### humidity in station ###
                         try:
                             from plugins import tank_humi_monitor
-                            humi = tank_humi_monitor.get_humidity((stations.get(run['station']).index)+1) # 0-7 to 1-8 humidity
-                            print humi  
+                            humi = int(tank_humi_monitor.get_humidity((stations.get(run['station']).index)+1)) # 0-7 to 1-8 humidity  
+                            if humi < 0:
+                               humi = "" 
+                                
                         except Exception:
                             humi = ""
    
