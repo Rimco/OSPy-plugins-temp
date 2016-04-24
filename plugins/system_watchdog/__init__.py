@@ -82,7 +82,6 @@ class StatusChecker(Thread):
         while not self._stop.is_set():
             try:
                 self.started.set()
-                self._sleep(3600)
 
             except Exception:
                 self.started.set()
@@ -122,7 +121,6 @@ def run_process(cmd):
     except:
         log.info(NAME, 'System watchodg plug-in: Error in Converting')
 
-
 ################################################################################
 # Web pages:                                                                   #
 ################################################################################
@@ -142,27 +140,29 @@ class install_page(ProtectedPage):
     def GET(self):
         log.clear(NAME)
         cmd = "sudo echo 'bcm2708_wdog' >> /etc/modules"
+        log.debug(NAME, cmd)
         run_process(cmd)
         cmd = "sudo modprobe bcm2708_wdog"
+        log.debug(NAME, cmd)
         run_process(cmd)
         cmd = "sudo apt-get install -y watchdog chkconfig"
+        log.debug(NAME, cmd)
         run_process(cmd)
         cmd = "sudo chkconfig watchdog on"
+        log.debug(NAME, cmd)
         run_process(cmd)
-        log.info(NAME, 'Saving config to /etc/watchdog.conf')
+        log.debug(NAME, 'Saving config to /etc/watchdog.conf')
 
         # http://linux.die.net/man/5/watchdog.conf
         f = open("/etc/watchdog.conf","w")
-        f.write("interval = 10\n")
-        f.write("max-load-1 = 24\n")
-        f.write("watchdog-device = /dev/watchdog\n")  
+        f.write("watchdog-device = /dev/watchdog\n")
+        f.write("watchdog-timeout = 14\n")
         f.write("realtime = yes\n")
         f.write("priority = 1\n")
-        f.write("test-timeout = 0\n")  
+        f.write("interval = 4\n")
+        f.write("max-load-1 = 24\n")
         f.close()
-        restart(3)
         return self.core_render.restarting(plugin_url(status_page))
-
 
 class stop_page(ProtectedPage):
     """Stop watchdog service page"""
@@ -170,12 +170,13 @@ class stop_page(ProtectedPage):
     def GET(self):
         log.clear(NAME)
         cmd = "sudo service watchdog stop"
+        log.debug(NAME, cmd) 
         run_process(cmd)
         cmd = "sudo update-rc.d watchdog remove" 
+        log.debug(NAME, cmd)
         run_process(cmd)
-        restart(3)
-        return self.core_render.restarting(plugin_url(status_page))
-      
+        restart(3) 
+        return self.core_render.restarting(plugin_url(status_page))      
 
 class start_page(ProtectedPage):
     """Start watchdog service page"""
@@ -183,9 +184,10 @@ class start_page(ProtectedPage):
     def GET(self):
         log.clear(NAME)
         cmd = "sudo chkconfig watchdog on" 
+        log.debug(NAME, cmd)
         run_process(cmd)
         cmd = "sudo /etc/init.d/watchdog start"
+        log.debug(NAME, cmd)
         run_process(cmd)
         restart(3)
         return self.core_render.restarting(plugin_url(status_page))
-
