@@ -247,7 +247,7 @@ def get_sonic_cm():
 def get_sonic_tank_cm():
     try:
         cm = get_sonic_cm()
-        if tank_cm < 0:
+        if cm < 0:
            return -1
  
         tank_cm = maping(cm,int(tank_options['distance_bottom']),int(tank_options['distance_top']),int(tank_options['distance_top']),int(tank_options['distance_bottom']))
@@ -310,7 +310,7 @@ def get_humidity(channel): # return humidity 0-100% for channel 1-8
 def get_tank(): # return water tank level 0-100%, -1 is error i2c not found
     tank_lvl = get_sonic_tank_cm()
     if tank_lvl >= 0:
-       tank_proc = maping(tank_lvl,int(tank_options['distance_bottom']),int(tank_options['distance_top']),0,100) 
+       tank_proc = maping(tank_lvl,int(tank_options['distance_top']),int(tank_options['distance_bottom']),0,100) 
        return tank_proc
     else:
        return -1
