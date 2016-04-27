@@ -72,7 +72,7 @@ class RemoteSender(Thread):
         last_rain = False 
         en_rain = True
         en_line = True
-        last_line = 0 
+        en_line2 = True
   
         # ex: tank=100&rain=1&humi=55&line=1&lastrun=15.4.2016&station=kurnik&duration=5min 3sec&api=a1b2v5f4  
         rain = 0          # rain status for rain=0 or rain=1 in get data
@@ -102,17 +102,21 @@ class RemoteSender(Thread):
                     ### power line state ###
                     try:
                        from plugins import ups_adj
-                       lin = ups_adj.get_check_power()
-                       if lin==1 and last_line==0:
-                          send_msg = True
-                          last_line =  lin
-                          line = 0
-                          en_line = True
-                       else:
-                          if en_line:
+                       lin = ups_adj.get_check_power() # read state power line from plugin
+                       if lin==1: 
+                          if en_line:  # send only if change 
+                              send_msg = True 
+                              en_line = False
+                              en_line2 = True 
+                          line = 0 # no power on web
+                           
+                       if lin==0:
+                          if en_line2: # send only if change
                              send_msg = True
-                             line = 1
-                             en_line = False
+                             en_line2 = False
+                             en_line = True
+                          line = 1 # power ok on web
+       
                     except Exception:
                        line = ""
 
