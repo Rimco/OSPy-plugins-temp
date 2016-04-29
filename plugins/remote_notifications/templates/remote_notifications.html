@@ -10,6 +10,9 @@ $var page: plugins
         jQuery("#cSubmit").click(function() {
             jQuery("#pluginForm").submit();
         });
+        jQuery("button#cCancel").click(function(){
+            window.location="/";
+        });
         jQuery("#cTest").click(function() {
             jQuery("#pluginForm").attr('action', "$plugins.plugin_url('remote_notifications.settings_page')?test")
             jQuery("#pluginForm").submit();
@@ -55,7 +58,7 @@ $var page: plugins
 <div id="controls">
     <button id="cSubmit" class="submit"><b>Submit</b></button>
     <button id="cTest" class="submit"><b>Send test data to server</b></button>
-    <a href="" class="button cancel danger">Cancel</a>
+    <button id="cCancel" class="cancel danger">Cancel</button>
 </div>
                                   
                      
