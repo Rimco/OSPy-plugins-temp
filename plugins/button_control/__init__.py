@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 __author__ = 'Martin Pihrt'
-# This plugin controls OpenSprinkler via 8 buttons. I2C controller MCP23017 on 0x27 address. 
-
-# not ready function version!!! - not use #
+# This plugin controls OpenSprinkler OSPy via 8 defined buttons. I2C controller MCP23017 on 0x27 address. 
 
 import time
 import traceback
@@ -15,9 +13,7 @@ import web
 from ospy.log import log
 from plugins import PluginOptions, plugin_url, plugin_data_dir
 from ospy.webpages import ProtectedPage
-from ospy.helpers import get_rpi_revision
-from ospy.helpers import datetime_string
-
+from ospy.helpers import get_rpi_revision, datetime_string, reboot, restart
 
 NAME = 'Button Control'
 LINK = 'settings_page'
@@ -25,14 +21,14 @@ LINK = 'settings_page'
 plugin_options = PluginOptions(
     NAME,
     {'use_button': False,
-     'button1': 'reboot',
-     'button2': 'restart',
-     'button3': 'power',
-     'button4': 'manual',
-     'button5': 'stop',
-     'button6': 'p1',
-     'button7': 'p2',
-     'button8': 'p3'
+     'button0': 'reboot',
+     'button1': 'pwrOff',
+     'button2': 'stopAll',
+     'button3': 'schedEn',
+     'button4': 'runP1',
+     'button5': 'runP2',
+     'button6': 'runP3',
+     'button7': 'runP4'
     }
 )
 
@@ -139,6 +135,7 @@ def read_buttons():
         return button_number 
     except:
         log.error(NAME, 'Button plug-in:\n' + 'Read button - FAULT')
+        self._sleep(60)
         return 0
 
 def led_outputs():
@@ -153,7 +150,7 @@ def led_outputs():
         # bus.write_byte_data(DEVICE,OLATA,0)
         # example (DEVICE,IODIRB, from 001 to 111) out 1 to 8
     except:
-        log.error(NAME, 'Button plug-in:\n' + 'Set LED - FAULT')
+        log.error(NAME, 'Button plug-in:\n' + 'Set LED - FAULT') 
         
 
 ################################################################################
@@ -166,9 +163,8 @@ class settings_page(ProtectedPage):
     def GET(self):
         return self.plugin_render.button_control(plugin_options, log.events(NAME))
 
-    def POST(self):
+    def POST(self): 
         plugin_options.web_update(web.input())
-
         if plugin_sender is not None:
             plugin_sender.update()
         raise web.seeother(plugin_url(settings_page), True)
