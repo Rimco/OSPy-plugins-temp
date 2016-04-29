@@ -13,7 +13,7 @@ import traceback
 import web
 from ospy import helpers
 from ospy.options import options
-from ospy.helpers import restart, ASCI_convert
+from ospy.helpers import restart, reboot, ASCI_convert
 from ospy.webpages import ProtectedPage
 from ospy.log import log
 from plugins import plugin_url
@@ -162,6 +162,7 @@ class install_page(ProtectedPage):
         f.write("interval = 4\n")
         f.write("max-load-1 = 24\n")
         f.close()
+        reboot(True) # reboot HW software after instal watchdog
         return self.core_render.restarting(plugin_url(status_page))
 
 class stop_page(ProtectedPage):
