@@ -27,10 +27,11 @@ $var page: plugins
 
 <div id="plugin">
     <div class="title">System Watchdog</div>
-    <p>This plugin enable or disable Warchdog daemon in system.</p>
-    <p>Broadcom BCM2708 chip on the RPi has a hardware watchdog. This can be very useful if your RPi is located remotely and locks up. However, this would not the preferred method of restarting the unit and in extreme cases this can result in file-system damage that could prevent the RPi from booting. If this occurs regularly you better find the root cause of the problem rather than fight the symptoms.</p>
-    <p>The watchdog daemon will send /dev/watchdog a heartbeat every 10 seconds. If /dev/watchdog does not receive this signal it will brute-force restart your Raspberry Pi.</p>
-    <p>This plugin needs Watchdog. If not installed Watchdog, plugin installs Watchdog in to the system himself.
+    <p>This plugin enable or disable HW Watchdog daemon in OSPy system. On the Raspberry Pi is hardware watchdog - Broadcom BCM2708 chip.</p>
+    <p>This can be very useful if your Raspberry Pi is located remotely and locks up. However, this would not the preferred method of restarting the unit and</p>
+    <p>in extreme cases this can result in file-system damage that could prevent the Raspberry Pi from booting. If this occurs regularly you better find the root</p>
+    <p>cause of the problem rather than fight the symptoms. The watchdog daemon will send /dev/watchdog a heartbeat every 4 seconds. If /dev/watchdog does not</p>
+    <p>receive this signal it will brute-force restart your Raspberry Pi. This plugin needs Watchdog. If not installed, plugin installs Watchdog in to the system himself.</p> 
     <form id="pluginForm">
         <table class="optionList">
             <tr>
