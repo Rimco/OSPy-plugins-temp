@@ -181,7 +181,7 @@ class Sender(Thread):
                 if tank_options['use_freq_7']:
                     humi7 = get_freq(7)
                     if humi7 >= 0:
-                       humi7_lvl = maping(humi3,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
+                       humi7_lvl = maping(humi7,int(tank_options['minimum_freq']),int(tank_options['maximum_freq']),0,100) 
                        if humi7_lvl >= 100:
                           humi7_lvl = 100
                        log.info(NAME, datetime_string() + ' F7: ' + str(humi7) + 'Hz H: ' + str(humi7_lvl) + '%.' )
