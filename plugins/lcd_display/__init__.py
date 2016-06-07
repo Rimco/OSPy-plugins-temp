@@ -22,7 +22,7 @@ from ospy.options import options
 from ospy.log import log
 from plugins import PluginOptions, plugin_url
 from ospy.webpages import ProtectedPage
-
+from ospy.helpers import ASCI_convert
 
 NAME = 'LCD Display'
 LINK = 'settings_page'
@@ -133,79 +133,154 @@ def stop():
 
 def get_report(index):
     result = None
-    if index == 0:  # start text to 16x1
-        result = options.name
-    elif index == 1:
-        result = "Irrigation system"
-    elif index == 2:
-        result = "OSPy version:"
-    elif index == 3:
-        result = version.ver_date
-    elif index == 4:
-        result = "My IP is:"
-    elif index == 5:
-        ip = helpers.get_ip()
-        result = str(ip)
-    elif index == 6:
-        result = "My port is:"
-    elif index == 7:
-        result = str(options.web_port)
-    elif index == 8:
-        result = "CPU temperature:"
-    elif index == 9:
-        result = helpers.get_cpu_temp(options.temp_unit) + ' ' + options.temp_unit
-    elif index == 10:
-        result = datetime.now().strftime('Date: %d.%m.%Y')
-    elif index == 11:
-        result = datetime.now().strftime('Time: %H:%M:%S')
-    elif index == 12:
-        result = "System uptime:"
-    elif index == 13:
-        result = helpers.uptime()
-    elif index == 14:
-        result = "Rain sensor:"
-    elif index == 15:
-        if inputs.rain_sensed():
-            result = "Active"
-        else:
-            result = "Inactive"
-    elif index == 16:
-        result = 'Last program:'
-    elif index == 17:
-        finished = [run for run in log.finished_runs() if not run['blocked']]
-        if finished:
-            result = finished[-1]['start'].strftime('%H:%M: ') + finished[-1]['program_name']
-        else:
-            result = 'None'
-    elif index == 18:
-        result = "Pressure sensor:"
-    elif index == 19:
-        try:
-            from plugins import pressure_monitor
-
-            state_press = pressure_monitor.get_check_pressure()
-            if state_press:
-                result = "GPIO is HIGH"
+    if (options.lang == 'cs_CZ'):
+        if index == 0:  # start text to 16x1
+             result = "ID systemu"
+        elif index == 1:
+             result = options.name
+        elif index == 2:
+             result = "Verze OSPy"
+        elif index == 3:
+             result = version.ver_date
+        elif index == 4:
+             result = "IP adresa"
+        elif index == 5:
+             ip = helpers.get_ip()
+             result = str(ip)
+        elif index == 6:
+             result = "Port"
+        elif index == 7:
+             result = str(options.web_port)
+        elif index == 8:
+             result = "Teplota CPU"
+        elif index == 9:
+             result = helpers.get_cpu_temp(options.temp_unit) + ' ' + options.temp_unit
+        elif index == 10:
+             result = datetime.now().strftime('Dat %d %m %Y')
+        elif index == 11:
+             result = datetime.now().strftime('Cas %H %M %S')
+        elif index == 12:
+             result = "V provozu"
+        elif index == 13:
+             result = helpers.uptime()
+        elif index == 14:
+             result = "Cidlo deste"
+        elif index == 15:
+             if inputs.rain_sensed():
+                 result = "aktivni"
+             else:
+                 result = "neaktivni"
+        elif index == 16:
+            result = 'Naposledy'
+        elif index == 17:
+            finished = [run for run in log.finished_runs() if not run['blocked']]
+            if finished:
+                result = finished[-1]['start'].strftime('v %H %M bezel ') + finished[-1]['program_name']
             else:
-                result = "GPIO is LOW"
+                result = 'zadny program'
+        elif index == 18:
+            result = "Cidlo tlaku"
+        elif index == 19:
+            try:
+                from plugins import pressure_monitor
+                state_press = pressure_monitor.get_check_pressure()
+                if state_press:
+                    result = "GPIO HIGH"
+                else:
+                    result = "GPIO LOW"
 
-        except Exception:
-            result = "Not available"
-    elif index == 20:        
-        result = "Water Tank Level:"
-    elif index == 21:
-        try:
-            from plugins import tank_humi_monitor
+            except Exception:
+                result = "neni k dispozici"
+        elif index == 20:        
+            result = "Nadrz s vodou"
+        elif index == 21:
+            try:
+                from plugins import tank_humi_monitor
+                cm = tank_humi_monitor.get_sonic_tank_cm()
+                if cm > 0: 
+                    result = str(cm) + ' cm'
+                else:
+                    result = "chyba - I2C zarizeni nenalezeno!"
 
-            cm = tank_humi_monitor.get_sonic_tank_cm()
-            if cm > 0: 
-               result = str(cm) + ' cm'
+            except Exception:
+                result = "neni k dispozici"
+
+        return ASCI_convert(result)
+
+
+    if (options.lang == 'en_US') or (options.lang == 'default'):
+        if index == 0:  # start text to 16x1
+             result = options.name
+        elif index == 1:
+             result = "Irrigation system"
+        elif index == 2:
+             result = "OSPy version:"
+        elif index == 3:
+             result = version.ver_date
+        elif index == 4:
+             result = "My IP is:"
+        elif index == 5:
+             ip = helpers.get_ip()
+             result = str(ip)
+        elif index == 6:
+             result = "My port is:"
+        elif index == 7:
+             result = str(options.web_port)
+        elif index == 8:
+             result = "CPU temperature:"
+        elif index == 9:
+             result = helpers.get_cpu_temp(options.temp_unit) + ' ' + options.temp_unit
+        elif index == 10:
+             result = datetime.now().strftime('Date: %d.%m.%Y')
+        elif index == 11:
+             result = datetime.now().strftime('Time: %H:%M:%S')
+        elif index == 12:
+             result = "System uptime:"
+        elif index == 13:
+             result = helpers.uptime()
+        elif index == 14:
+             result = "Rain sensor:"
+        elif index == 15:
+             if inputs.rain_sensed():
+                 result = "Active"
+             else:
+                 result = "Inactive"
+        elif index == 16:
+            result = 'Last program:'
+        elif index == 17:
+            finished = [run for run in log.finished_runs() if not run['blocked']]
+            if finished:
+                result = finished[-1]['start'].strftime('%H:%M: ') + finished[-1]['program_name']
             else:
-               result = "Error - I2C device not found!"
+                result = 'None'
+        elif index == 18:
+            result = "Pressure sensor:"
+        elif index == 19:
+            try:
+                from plugins import pressure_monitor
+                state_press = pressure_monitor.get_check_pressure()
+                if state_press:
+                    result = "GPIO is HIGH"
+                else:
+                    result = "GPIO is LOW"
 
-        except Exception:
-            result = "Not available"
-    return result
+            except Exception:
+                result = "Not available"
+        elif index == 20:        
+            result = "Water Tank Level:"
+        elif index == 21:
+            try:
+                from plugins import tank_humi_monitor
+                cm = tank_humi_monitor.get_sonic_tank_cm()
+                if cm > 0: 
+                    result = str(cm) + ' cm'
+                else:
+                    result = "Error - I2C device not found!"
+
+            except Exception:
+                result = "Not available"
+
+        return result
 
 
 def find_lcd_address():
