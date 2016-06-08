@@ -24,6 +24,8 @@ from plugins import PluginOptions, plugin_url
 from ospy.webpages import ProtectedPage
 from ospy.helpers import ASCI_convert
 
+import i18n
+
 NAME = 'LCD Display'
 LINK = 'settings_page'
 
@@ -90,7 +92,7 @@ class LCDSender(Thread):
                 self._sleep(4)
 
             except Exception:
-                log.error(NAME, 'LCD display plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('LCD display plug-in:\n') + traceback.format_exc())
                 self._sleep(60)
 
 
@@ -293,7 +295,7 @@ def find_lcd_address():
         bus = smbus.SMBus(0 if helpers.get_rpi_revision() == 1 else 1)
         # DF - alter RPi version test fallback to value that works on BBB
     except ImportError:
-        log.warning(NAME, 'Could not import smbus.')
+        log.warning(NAME, _('Could not import smbus.'))
     else:
 
         for addr, pcf_type in search_range.iteritems():
@@ -306,7 +308,7 @@ def find_lcd_address():
             except Exception:
                 pass
         else:
-            log.warning(NAME, 'Could not find any PCF8574 controller.')
+            log.warning(NAME, _('Could not find any PCF8574 controller.'))
 
 
 def update_lcd(line1, line2=None):

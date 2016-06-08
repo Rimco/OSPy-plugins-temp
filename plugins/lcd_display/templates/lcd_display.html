@@ -1,6 +1,6 @@
 $def with(plugin_options, events)
 
-$var title: LCD settings
+$var title: $_('LCD settings')
 $var page: plugins
 
 <script>
@@ -18,33 +18,33 @@ $var page: plugins
 </script>
 
 <div id="plugin">
-    <div class="title">LCD settings</div>
-    <p>This plugin shows information on a 16x2 or 16x1 character LCD with PCF8574(A).</p>
-    <p>Automatically detects the display at the following I2C addresses: 0x20-0x27, 0x38-0x3F.</p>
-    <p>Compatible with the HD44780 controller.</p>
-    <p>Visit <a href="http://www.pihrt.com/elektronika/258-moje-rapsberry-pi-i2c-lcd-16x2">Martin Pihrt's blog</a> for more information.</p><br>
+    <div class="title">$_('LCD settings')</div>
+    <p>$_('This plugin shows information on a 16x2 or 16x1 character LCD with') PCF8574(A).</p>
+    <p>$_('Automatically detects the display at the following I2C addresses'): 0x20-0x27, 0x38-0x3F.</p>
+    <p>$_('Compatible with the HD44780 controller').</p>
+    <p>$_('Visit') <a href="http://www.pihrt.com/elektronika/258-moje-rapsberry-pi-i2c-lcd-16x2">Martin Pihrt's blog</a> $_('for more information').</p><br>
     <form id="pluginForm" action="$plugins.plugin_url('lcd_display.settings_page')" method="post">
         <table class="optionList">
             <tr>
-                <td style='text-transform: none;'>Use I2C LCD:</td>
+                <td style='text-transform: none;'>$_('Use I2C LCD'):</td>
                 <td>
                     <input name='use_lcd' type='checkbox'${" checked" if plugin_options['use_lcd'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use two lines:</td>
+                <td style='text-transform: none;'>$_('Use two lines'):</td>
                 <td>
                     <input name='two_lines' type='checkbox'${" checked" if plugin_options['two_lines'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use print lines to debug files:</td>
+                <td style='text-transform: none;'>$_('Use print lines to debug files'):</td>
                 <td>
                     <input name='debug_line' type='checkbox'${" checked" if plugin_options['debug_line'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Status:</td>
+                <td style='text-transform: none;'>$_('Status'):</td>
                 <td>
                     <textarea style="font-family: monospace;" rows="7" cols="35" readonly>$'\n'.join(events)</textarea>
                 </td>
@@ -53,8 +53,6 @@ $var page: plugins
     </form>
 </div>
 <div id="controls">
-    <button id="cSubmit" class="submit"><b>Submit</b></button>
-    <button id="cCancel" class="cancel danger">Cancel</button>
+    <button id="cSubmit" class="submit"><b>$_('Submit')</b></button>
+    <button id="cCancel" class="cancel danger">$_('Cancel')</button>
 </div>
-                                  
-                     
