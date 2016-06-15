@@ -17,6 +17,8 @@ from plugins import PluginOptions, plugin_url
 from ospy.webpages import ProtectedPage
 from ospy.helpers import datetime_string
 
+import i18n
+
 NAME = 'UPS Monitor'
 LINK = 'settings_page'
 
@@ -93,9 +95,9 @@ class UPSSender(Thread):
                     test = get_check_power()
 
                     if not test:
-                        text = 'OK'
+                        text = _('OK')
                     else:
-                        text = 'FAULT'
+                        text = _('FAULT')
                     self.status['power%d'] = text
 
                     if not test:
@@ -104,7 +106,7 @@ class UPSSender(Thread):
                     if test:                                               # if power line is not active
                         reboot_time = True                                  # start countdown timer
                         if once:
-                            msg = 'UPS plugin detected fault on power line.' # send email with info power line fault
+                            msg = _('UPS plugin detected fault on power line.') # send email with info power line fault
                             log.info(NAME, msg)
                             if ups_options['sendeml']:                       # if enabled send email
                                 send_email(msg)
@@ -115,17 +117,17 @@ class UPSSender(Thread):
                         count_val = int(ups_options['time']) * 60             # value for countdown
                         actual_time = int(time.time())
                         log.clear(NAME)
-                        log.info(NAME, 'Time to shutdown: ' + str(count_val - (actual_time - last_time)) + ' sec')
+                        log.info(NAME, _('Time to shutdown') + ': ' + str(count_val - (actual_time - last_time)) + ' ' + _('sec'))
                         if ((actual_time - last_time) >= count_val):        # if countdown is 0
                             last_time = actual_time
                             test = get_check_power()
                             if test:                                         # if power line is current not active
                                 log.clear(NAME)
-                                log.info(NAME, 'Power line is not restore in time -> sends email and shutdown system.')
+                                log.info(NAME, _('Power line is not restore in time -> sends email and shutdown system.'))
                                 reboot_time = False
                                 if ups_options['sendeml']:                    # if enabled send email
                                     if once_two:
-                                        msg = 'UPS plugin - power line is not restore in time -> shutdown system!' # send email with info shutdown system
+                                        msg = _('UPS plugin - power line is not restore in time -> shutdown system!') # send email with info shutdown system
                                         send_email(msg)
                                         once_two = False
 
@@ -138,7 +140,7 @@ class UPSSender(Thread):
                     if not test:
                         if once_three:
                             if ups_options['sendeml']:                     # if enabled send email
-                                msg = 'UPS plugin - power line has restored - OK.'
+                                msg = _('UPS plugin - power line has restored - OK.')
                                 log.clear(NAME)
                                 log.info(NAME, msg)
                                 send_email(msg)
@@ -149,7 +151,7 @@ class UPSSender(Thread):
                 self._sleep(1)
 
             except Exception:
-                log.error(NAME, 'UPS plug-in: \n' + traceback.format_exc())
+                log.error(NAME, _('UPS plug-in') + ': \n' + traceback.format_exc())
                 self._sleep(60)
 
 
@@ -163,7 +165,7 @@ def start():
     if ups_sender is None:
         ups_sender = UPSSender()
         log.clear(NAME)
-        log.info(NAME, 'UPS plugin is started.')
+        log.info(NAME, _('UPS plugin is started.'))
 
 
 def stop():
@@ -176,13 +178,13 @@ def stop():
 
 def send_email(msg):
     """Send email"""
-    message = datetime_string() + ': ' + str(msg)
+    message = datetime_string() + ': ' + msg
     try:
         from plugins.email_notifications import email
         email(message)
-        log.info(NAME, 'Email was sent: ' + message)
-    except Exception as err:
-        log.info(NAME, 'Email was not sent! ' + str(err))
+        log.info(NAME, _('Email was sent') + ': ' + message)
+    except Exception:
+        log.info(NAME, _('Email was not sent') + '! ' + traceback.format_exc())
 
 
 def get_check_power_str():

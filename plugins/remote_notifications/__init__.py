@@ -21,6 +21,8 @@ from ospy.inputs import inputs
 from ospy.log import log, EVENT_FILE
 from ospy.helpers import datetime_string, get_input
 
+import i18n
+
 
 NAME = 'Remote Notifications'
 LINK = 'settings_page'
@@ -63,9 +65,9 @@ class RemoteSender(Thread):
         log.clear(NAME)
         try:
             send_data(text)  # send get data
-            log.info(NAME, 'Remote was sent:\n' + text)
+            log.info(NAME, _('Remote was sent') + ':\n' + text)
         except Exception:
-            log.error(NAME, 'Remote was not sent!\n' + traceback.format_exc())
+            log.error(NAME, _('Remote was not sent') + '!\n' + traceback.format_exc())
 
     def run(self):
         send_msg = False  # send get data if change (rain, end program ....
@@ -176,7 +178,7 @@ class RemoteSender(Thread):
                 self._sleep(2)
 
             except Exception:
-                log.error(NAME, 'Remote plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Remote plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 
@@ -206,9 +208,9 @@ def send_data(text):
         req = urllib2.Request(url=remote_options['rem_adr']+'save.php/?' + text)
         req.add_header('Referer', 'OSPy sprinkler') 
         f = urllib2.urlopen(req)
-        log.info(NAME, 'Remote server reply:\n' + f.read())
+        log.info(NAME, _('Remote server reply') + ':\n' + f.read())
     else:
-        raise Exception('Remote plug-in is not properly configured!')
+        raise Exception(_('Remote plug-in is not properly configured') + '!')
 
 
 ################################################################################

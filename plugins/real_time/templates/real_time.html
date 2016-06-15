@@ -1,6 +1,6 @@
 $def with(plugin_options, events)
 
-$var title: Real Time and NTP Time sync system time
+$var title: $_('Real Time and NTP Time sync system time')
 $var page: plugins
 <script>
     // Initialize behaviors
@@ -17,36 +17,36 @@ $var page: plugins
 </script>
 
 <div id="plugin">
-    <div class="title">Real Time and NTP Time sync</div>
-    <p>When is enabled synchronization RTC Time and NTP time, system time adjusted every hour from NTP server (is posible) or RTC time (if exists). Time from NTP server is saved to real time DS 1307 (on I2C bus) as HW time.</p>
+    <div class="title">$_('Real Time and NTP Time sync system time')</div>
+    <p>$_('When is enabled synchronization RTC Time and NTP time, system time adjusted every hour from NTP server (is posible) or RTC time (if exists). Time from NTP server is saved to real time DS 1307 (on I2C bus) as HW time.')</p>
     <form id="pluginForm" action="$plugins.plugin_url('real_time.settings_page')" method="post">
         <table class="optionList">
             <tr>
-                <td style='text-transform: none;'>Use Real Time:</td>
+                <td style='text-transform: none;'>$_('Use Real Time'):</td>
                 <td>
                     <input name='enabled' type='checkbox'${" checked" if plugin_options['enabled'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>Use NTP Time:</td>
+                <td style='text-transform: none;'>$_('Use NTP Time'):</td>
                 <td>
                     <input name='use_ntp' type='checkbox'${" checked" if plugin_options['use_ntp'] else ""}>
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>NTP server IP adress:</td>
+                <td style='text-transform: none;'>$_('NTP server IP adress'):</td>
                 <td>
                     <input name='ntp_server' type='text' value="$plugin_options['ntp_server']">
                 </td>
             </tr>
             <tr>
-                <td style='text-transform: none;'>NTP port:</td>
+                <td style='text-transform: none;'>$_('NTP port'):</td>
                 <td>
-                    <input name='ntp_port' type='number' size="30" value="$plugin_options['ntp_port']"> (default 123)
+                    <input name='ntp_port' type='number' size="30" value="$plugin_options['ntp_port']"> ($_('default 123'))
                 </td>
             </tr>    
             <tr>
-                <td style='text-transform: none;'>Status:</td>
+                <td style='text-transform: none;'>$_('Status'):</td>
                 <td>
                     <textarea style="font-family: monospace;" rows="7" cols="55" readonly>$'\n'.join(events)</textarea>
                 </td>
@@ -55,6 +55,6 @@ $var page: plugins
     </form>
 </div>
 <div id="controls">
-    <button id="cSubmit" class="submit"><b>Submit</b></button>
-    <button id="cCancel" class="cancel danger">Cancel</button>
+    <button id="cSubmit" class="submit"><b>$_('Submit')</b></button>
+    <button id="cCancel" class="cancel danger">$_('Cancel')</button>
 </div>

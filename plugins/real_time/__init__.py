@@ -25,6 +25,8 @@ from ospy.webpages import ProtectedPage
 from ospy.helpers import datetime_string
 from plugins import PluginOptions, plugin_url
 
+import i18n
+
 NAME = 'Real Time and NTP time'
 LINK = 'settings_page'
 
@@ -72,51 +74,51 @@ class RealTimeChecker(Thread):
                 if plugin_options['enabled']:
                     log.clear(NAME)
                     dis_text = True
-                    log.info(NAME, 'Local time: ' + datetime_string())
+                    log.info(NAME, _('Local time') + ': ' + datetime_string())
                     try:                                                                 # try use library rtc_DS1307
                        ds1307 = rtc_DS1307.rtc_DS1307(1)
 
                     except:
-                       log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
+                       log.error(NAME, _('Real Time plug-in') + ':\n' + traceback.format_exc())
 
                     if plugin_options['use_ntp']:
                        try:
                            ntp_time = getNTPtime()                                       # try read NTP time from web
 
                        except:
-                           log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
+                           log.error(NAME, _('Real Time plug-in') + ':\n' + traceback.format_exc())
 
-                       log.info(NAME, 'NTP time ' + str(plugin_options['ntp_server']) + ': ' + str(ntp_time))
+                       log.info(NAME, _('NTP time') + ' ' + str(plugin_options['ntp_server']) + ': ' + str(ntp_time))
               
                     try:
                        rtc_time = ds1307.read_datetime()                                 # try read RTC time from DS1307
-                       log.info(NAME, 'RTC time: ' + str(rtc_time))
+                       log.info(NAME, _('RTC time') + ': ' + str(rtc_time))
 
                     except:
-                       log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
+                       log.error(NAME, _('Real Time plug-in') + ':\n' + traceback.format_exc())
                     
 
                     if ntp_time is not None and rtc_time is not None and ntp_time != rtc_time:   # try save NTP time to RTC DS1307 if NTP!=RTC
                        try:
-                          log.info(NAME, 'Saving NTP time to RTC time.')                 
+                          log.info(NAME, _('Saving NTP time to RTC time.'))                 
                           ds1307.write_datetime(getNTPtime())
                           rtc_time = ds1307.read_datetime()                                 
-                          log.info(NAME, 'RTC time is now: ' + str(rtc_time))
+                          log.info(NAME, _('RTC time is now') + ': ' + str(rtc_time))
 
                        except:
-                          log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
+                          log.error(NAME, _('Real Time plug-in') + ':\n' + traceback.format_exc())
 
                     if ntp_time is not None and ntp_time != datetime_string():           # try sync local time from NTP time if NTP!=local time
                        try:
-                          log.info(NAME, 'Saving NTP time to local system time.')                                       
+                          log.info(NAME, _('Saving NTP time to local system time.'))                                       
                           subprocess.call("sudo date -s '{:}'".format(ntp_time.strftime('%Y/%m/%d %H:%M:%S')), shell=True) # Sets system time (Requires root, obviously)
                           
                        except:
-                          log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
+                          log.error(NAME, _('Real Time plug-in') + ':\n' + traceback.format_exc())
                     else:                                                                 # try sync local time from RTC time
                        try: 
                           if rtc_time is not None: 
-                             log.info(NAME, 'Read RTC time and save to local system time.') 
+                             log.info(NAME, _('Read RTC time and save to local system time.')) 
                              # example for set time:
                              # date -s hh:mm:ss
                              # date 021415232015 (Sun Feb 14 15:23:31 PST 2015)
@@ -126,18 +128,18 @@ class RealTimeChecker(Thread):
                              os.system('sudo date --set=' + set_time)  
 
                        except:
-                          log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())                         
+                          log.error(NAME, _('Real Time plug-in') + ':\n' + traceback.format_exc())                         
 
                     self._sleep(3600)
 
                 else:
                     if dis_text:
                         log.clear(NAME)
-                        log.info(NAME, 'Plug-in is disabled.')
+                        log.info(NAME, _('Plug-in is disabled.'))
                         dis_text = False
 
             except Exception:
-                log.error(NAME, 'Real Time plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Real Time plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 

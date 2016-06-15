@@ -18,6 +18,8 @@ from ospy.webpages import ProtectedPage
 from ospy.log import log
 from plugins import plugin_url
 
+import i18n
+
 
 NAME = 'System Watchdog'
 LINK = 'status_page'
@@ -53,7 +55,7 @@ class StatusChecker(Thread):
     def _is_installed(self):
         """Returns watchdog is instaled."""
         if not os.path.exists("/usr/sbin/watchdog"):       # if watchdog is not installed
-           log.info(NAME, 'Watchdog is not installed. For continue press button install watchdog.')
+           log.info(NAME, _('Watchdog is not installed. For continue press button install watchdog.'))
         else:
            self.status['service_install'] = True
 
@@ -71,7 +73,7 @@ class StatusChecker(Thread):
 
         except Exception:
                 self.started.set()
-                log.error(NAME, 'System watchodg plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('System watchodg plug-in') + ':\n' + traceback.format_exc())
    
        
     def run(self):
@@ -85,7 +87,7 @@ class StatusChecker(Thread):
 
             except Exception:
                 self.started.set()
-                log.error(NAME, 'System watchodg plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('System watchodg plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 
@@ -116,10 +118,10 @@ def run_process(cmd):
             stdout=subprocess.PIPE,
             shell=True)
         output = proc.communicate()[0]
-        log.info(NAME, 'System watchodg plug-in:\n' + ASCI_convert(output))
+        log.info(NAME, _('System watchodg plug-in') + ':\n' + ASCI_convert(output))
 
     except:
-        log.info(NAME, 'System watchodg plug-in: Error in Converting')
+        log.info(NAME, _('System watchodg plug-in') + ':\n' + _('Error in Converting'))
 
 ################################################################################
 # Web pages:                                                                   #
@@ -151,7 +153,7 @@ class install_page(ProtectedPage):
         cmd = "sudo chkconfig watchdog on"
         log.debug(NAME, cmd)
         run_process(cmd)
-        log.debug(NAME, 'Saving config to /etc/watchdog.conf')
+        log.debug(NAME, _('Saving config to /etc/watchdog.conf'))
 
         # http://linux.die.net/man/5/watchdog.conf
         f = open("/etc/watchdog.conf","w")

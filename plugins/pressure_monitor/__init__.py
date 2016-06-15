@@ -18,6 +18,8 @@ from plugins import PluginOptions, plugin_url
 from ospy.webpages import ProtectedPage
 from ospy.helpers import datetime_string
 
+import i18n
+
 NAME = 'Pressure Monitor'
 LINK = 'settings_page'
 
@@ -90,14 +92,14 @@ class PressureSender(Thread):
                         three_text = True
                         if once_text:                               # text on the web if master is on
                             log.clear(NAME)
-                            log.info(NAME, 'Master station is ON.')
+                            log.info(NAME, _('Master station is ON.'))
                             once_text = False
                         if get_check_pressure():                                     # if pressure sensor is on
                             actual_time = int(time.time())
                             count_val = int(pressure_options['time'])
                             log.clear(NAME)
-                            log.info(NAME, 'Time to test pressure sensor: ' + str(
-                                count_val - (actual_time - last_time)) + ' sec')
+                            log.info(NAME, _('Time to test pressure sensor') + ': ' + str(
+                                count_val - (actual_time - last_time)) + ' ' + _('sec'))
                             if actual_time - last_time > int(
                                     pressure_options['time']): # wait for activated pressure sensor (time delay)
                                 last_time = actual_time
@@ -106,8 +108,7 @@ class PressureSender(Thread):
                                     log.finish_run(None)                               # save log
                                     stations.clear()                                   # set all station to off
                                     log.clear(NAME)
-                                    log.info(NAME,
-                                             'Pressure sensor is not activated in time -> stops all stations and send email.')
+                                    log.info(NAME, _('Pressure sensor is not activated in time -> stops all stations and send email.'))
                                     if pressure_options['sendeml']:                    # if enabled send email
                                         send = True
 
@@ -121,7 +122,7 @@ class PressureSender(Thread):
                         if stations.master is not None:
                             if two_text:
                                 log.clear(NAME)
-                                log.info(NAME, 'Master station is OFF.')
+                                log.info(NAME, _('Master station is OFF.'))
                                 two_text = False
                                 five_text = True
                             last_time = int(time.time())
@@ -131,29 +132,29 @@ class PressureSender(Thread):
                     two_text = True
                     if four_text:                                                # text on the web if plugin is disabled
                         log.clear(NAME)
-                        log.info(NAME, 'Pressure monitor plug-in is disabled.')
+                        log.info(NAME, _('Pressure monitor plug-in is disabled.'))
                         four_text = False
 
                 if stations.master is None:                                      # text on the web if master station is none
                     if three_text:
                         log.clear(NAME)
-                        log.info(NAME, 'Not used master station.')
+                        log.info(NAME, _('Not used master station.'))
                         three_text = False
 
                 if send:
-                    TEXT = (datetime_string() + ': System detected error: pressure sensor.')
+                    TEXT = (datetime_string() + ': ' + _('System detected error: pressure sensor.'))
                     try:
                         from plugins.email_notifications import email
                         email(TEXT)                                     # send email without attachments
-                        log.info(NAME, 'Email was sent: ' + TEXT)
+                        log.info(NAME, _('Email was sent') + ': ' + TEXT)
                         send = False
-                    except Exception as err:
-                        log.error(NAME, 'Email was not sent! ' + str(err))
+                    except Exception:
+                        log.error(NAME, _('Email was not sent') + '! '  + traceback.format_exc())
 
                 self._sleep(1)
 
             except Exception:
-                log.error(NAME, 'Pressure monitor plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Pressure monitor plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 

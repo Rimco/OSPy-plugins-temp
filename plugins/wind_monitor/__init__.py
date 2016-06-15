@@ -20,6 +20,8 @@ from ospy.webpages import ProtectedPage
 from ospy.helpers import get_rpi_revision
 from ospy.helpers import datetime_string
 
+import i18n
+
 NAME = 'Wind Speed Monitor'
 LINK = 'settings_page'
 
@@ -72,7 +74,7 @@ class WindSender(Thread):
 
             self.bus = smbus.SMBus(1 if get_rpi_revision() >= 2 else 0)
         except ImportError:
-            log.warning(NAME, 'Could not import smbus.')
+            log.warning(NAME, _('Could not import smbus.'))
 
         if self.bus is not None:
             self.pcf = set_counter(self.bus)     # set pcf8583 as counter
@@ -88,7 +90,7 @@ class WindSender(Thread):
             try:
                 if self.bus is not None and wind_options['use_wind_monitor']:  # if wind plugin is enabled
                     disable_text = True
-                    log.info(NAME,'Please wait 10 sec...')
+                    log.info(NAME, _('Please wait 10 sec...'))
                     while x <= 10:
                        puls = counter(self.bus)
                        l.append(puls)
@@ -97,7 +99,7 @@ class WindSender(Thread):
  
                     avg_puls = reduce(lambda x, y: x + y, l) / len(l)
                     if avg_puls >= 42: # maximum pulses from counter
-                       log.error(NAME,'Wind speed > 150 km/h (42 m/sec)')
+                       log.error(NAME, _('Wind speed > 150 km/h (42 m/sec)'))
                        x = 0
                        l = []
                     
@@ -105,9 +107,9 @@ class WindSender(Thread):
                     self.status['meter'] = round(val,2)
                     self.status['kmeter'] = round(val*3.6,2)
                     log.clear(NAME)
-                    log.info(NAME,'Please wait 10 sec...')
-                    log.info(NAME,'Average m/sec: ' + str(round(val,2)))
-                    log.info(NAME,'Average pulses/sec: ' + str(avg_puls))
+                    log.info(NAME, _('Please wait 10 sec...'))
+                    log.info(NAME, _('Average m/sec') + ': ' + str(round(val,2)))
+                    log.info(NAME, _('Average pulses/sec') + ': ' + str(avg_puls))
                    
                     if get_station_is_on():                               # if station is on
                        if int(val) >= int(wind_options['maxspeed']):      # if wind speed is > options max speed
@@ -115,7 +117,7 @@ class WindSender(Thread):
                           log.finish_run(None)                            # save log
                           stations.clear()                                # set all station to off
                           log.clear(NAME)
-                          log.info(NAME,'Stops all stations and sends email if enabled sends email.')
+                          log.info(NAME, _('Stops all stations and sends email if enabled sends email.'))
                           if wind_options['sendeml']:                     # if enabled send email
                              send = True                    
                                       
@@ -123,19 +125,19 @@ class WindSender(Thread):
                     # text on the web if plugin is disabled
                     if disable_text:  
                        log.clear(NAME)
-                       log.info(NAME, 'Wind speed monitor plug-in is disabled.')
+                       log.info(NAME, _('Wind speed monitor plug-in is disabled.'))
                        disable_text = False                        
 
                 if send:
-                    TEXT = (datetime_string() + ': System detected error: wind speed monitor. All stations set to OFF. Wind is: ' + str(round(val*3.6,2)) + ' km/h.' )
+                    TEXT = (datetime_string() + ': ' + _('System detected error: wind speed monitor. All stations set to OFF. Wind is') + ': ' + str(round(val*3.6,2)) + ' km/h.' )
                     try:
                         from plugins.email_notifications import email 
                         email(TEXT)                             # send email without attachments
-                        log.info(NAME, 'Email was sent: ' + TEXT)
+                        log.info(NAME, _('Email was sent') + ': ' + TEXT)
                         send = False
-                    except Exception as err:
+                    except Exception:
                         log.clear(NAME)
-                        log.error(NAME, 'Email was not sent! ' + str(err))
+                        log.error(NAME, _('Email was not sent') + '! ' + traceback.format_exc())
 
                 if x >= 10: # erase list pulses
                    x = 0
@@ -145,7 +147,7 @@ class WindSender(Thread):
 
             except Exception:
                 log.clear(NAME)
-                log.error(NAME, 'Wind Speed monitor plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Wind Speed monitor plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
                 self.pcf = set_counter(self.bus)     # set pcf8583 as counter
 
@@ -179,10 +181,10 @@ def set_counter(i2cbus):
         i2cbus.write_byte_data(pcf_addr, 0x01, 0x00) # reset LSB
         i2cbus.write_byte_data(pcf_addr, 0x02, 0x00) # reset midle Byte
         i2cbus.write_byte_data(pcf_addr, 0x03, 0x00) # reset MSB
-        log.info(NAME, 'Wind speed monitor plug-in: Setup PCF8583 as event counter - OK')
+        log.info(NAME, _('Wind speed monitor plug-in') + ': ' + _('Setup PCF8583 as event counter - OK'))
         return 1  
     except:
-        log.error(NAME, 'Wind speed monitor plug-in:\n' + 'Setup PCF8583 as event counter - FAULT')
+        log.error(NAME, _('Wind speed monitor plug-in') + ':\n' + _('Setup PCF8583 as event counter - FAULT'))
         return None
 
 

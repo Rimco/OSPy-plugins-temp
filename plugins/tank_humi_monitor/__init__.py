@@ -20,6 +20,8 @@ from plugins import PluginOptions, plugin_url
 from ospy.webpages import ProtectedPage
 from ospy.helpers import datetime_string
 
+import i18n
+
 
 NAME = 'Water Tank and Humidity Monitor'
 LINK = 'settings_page'
@@ -85,14 +87,14 @@ class Sender(Thread):
                 if tank_options['use_sonic']: 
                     if two_text:
                         log.clear(NAME)
-                        log.info(NAME, 'Water tank monitor is enabled.')
+                        log.info(NAME, _('Water tank monitor is enabled.'))
                         once_text = True
                         two_text = False
 
                     level_in_tank = get_sonic_tank_cm()
                     
                     if level_in_tank >= 0: # if I2C device exists
-                        log.info(NAME, datetime_string() + ' Water level: ' + str(level_in_tank) + ' cm.')
+                        log.info(NAME, datetime_string() + ' ' + _('Water level') + ': ' + str(level_in_tank) + ' ' + _('cm') + '.')
 
                         if level_in_tank <= int(tank_options['water_minimum']) and mini and not options.manual_mode and level_in_tank > -1:
                         
@@ -100,7 +102,7 @@ class Sender(Thread):
                                send = True
                                mini = False 
     
-                            log.info(NAME, datetime_string() + ' ERROR: Water in Tank < ' + str(tank_options['water_minimum']) + ' cm! ')
+                            log.info(NAME, datetime_string() + ' ' + _('ERROR: Water in Tank') + ' < ' + str(tank_options['water_minimum']) + ' ' + _('cm') + '!')
                             options.scheduler_enabled = False                  # disable scheduler
                             log.finish_run(None)                               # save log
                             stations.clear()                                   # set all station to off  
@@ -109,7 +111,7 @@ class Sender(Thread):
                         if level_in_tank > int(tank_options['water_minimum']) + 5 and not mini: 
                             mini = True
                     else:
-                        log.info(NAME, datetime_string() + ' Water level: Error I2C device not found.')
+                        log.info(NAME, datetime_string() + ' ' + _('Water level: Error I2C device not found.'))
                 
                 else:
                     if once_text:
@@ -126,7 +128,7 @@ class Sender(Thread):
                           humi1_lvl = 100 
                        log.info(NAME, datetime_string() + ' F1: ' + str(humi1) + 'Hz H: ' + str(humi1_lvl) + '%.' )
                     else:
-                       log.info(NAME, datetime_string() + ' F1: Error I2C device not found.')
+                       log.info(NAME, datetime_string() + ' F1: ' + _('Error I2C device not found.'))
                       
                 if tank_options['use_freq_2']:
                     humi2 = get_freq(2)
@@ -136,7 +138,7 @@ class Sender(Thread):
                           humi2_lvl = 100
                        log.info(NAME, datetime_string() + ' F2: ' + str(humi2) + 'Hz H: ' + str(humi2_lvl) + '%.' )
                     else:
-                       log.info(NAME, datetime_string() + ' F2: Error I2C device not found.')
+                       log.info(NAME, datetime_string() + ' F2: ' + _('Error I2C device not found.'))
   
                 if tank_options['use_freq_3']:
                     humi3 = get_freq(3)
@@ -146,7 +148,7 @@ class Sender(Thread):
                           humi3_lvl = 100
                        log.info(NAME, datetime_string() + ' F3: ' + str(humi3) + 'Hz H: ' + str(humi3_lvl) + '%.' )
                     else:
-                       log.info(NAME, datetime_string() + ' F3: Error I2C device not found.')
+                       log.info(NAME, datetime_string() + ' F3: ' + _('Error I2C device not found.'))
 
                 if tank_options['use_freq_4']:
                     humi4 = get_freq(4)
@@ -156,7 +158,7 @@ class Sender(Thread):
                           humi4_lvl = 100
                        log.info(NAME, datetime_string() + ' F4: ' + str(humi4) + 'Hz H: ' + str(humi4_lvl) + '%.' )
                     else:
-                       log.info(NAME, datetime_string() + ' F4: Error I2C device not found.')
+                       log.info(NAME, datetime_string() + ' F4: ' + _('Error I2C device not found.'))
 
                 if tank_options['use_freq_5']:
                     humi5 = get_freq(5)
@@ -166,7 +168,7 @@ class Sender(Thread):
                           humi5_lvl = 100
                        log.info(NAME, datetime_string() + ' F5: ' + str(humi5) + 'Hz H: ' + str(humi5_lvl) + '%.' )
                     else:
-                       log.info(NAME, datetime_string() + ' F5: Error I2C device not found.')
+                       log.info(NAME, datetime_string() + ' F5: ' + _('Error I2C device not found.'))
 
                 if tank_options['use_freq_6']:
                     humi6 = get_freq(6)
@@ -176,7 +178,7 @@ class Sender(Thread):
                           humi6_lvl = 100
                        log.info(NAME, datetime_string() + ' F6: ' + str(humi6) + 'Hz H: ' + str(humi6_lvl) + '%.' )
                     else:
-                       log.info(NAME, datetime_string() + ' F6: Error I2C device not found.')
+                       log.info(NAME, datetime_string() + ' F6: ' + _('Error I2C device not found.'))
 
                 if tank_options['use_freq_7']:
                     humi7 = get_freq(7)
@@ -186,7 +188,7 @@ class Sender(Thread):
                           humi7_lvl = 100
                        log.info(NAME, datetime_string() + ' F7: ' + str(humi7) + 'Hz H: ' + str(humi7_lvl) + '%.' )
                     else:
-                       log.info(NAME, datetime_string() + ' F7: Error I2C device not found.')
+                       log.info(NAME, datetime_string() + ' F7: ' + _('Error I2C device not found.'))
 
                 if tank_options['use_freq_8']:
                     humi8 = get_freq(8)
@@ -196,23 +198,23 @@ class Sender(Thread):
                           humi8_lvl = 100
                        log.info(NAME, datetime_string() + ' F8: ' + str(humi8) + 'Hz H: ' + str(humi8_lvl) + '%.' )
                     else:
-                       log.info(NAME, datetime_string() + ' F8: Error I2C device not found.')
+                       log.info(NAME, datetime_string() + ' F8: ' + _('Error I2C device not found.'))
 
                 if send:
-                    TEXT = (datetime_string() + '\nSystem detected error: Water Tank has minimum Water Level: ' + str(tank_options['water_minimum']) + 'cm.\nScheduler is now disabled and all Stations turn Off.')
+                    TEXT = (datetime_string() + '\n' + _('System detected error: Water Tank has minimum Water Level') + ': ' + str(tank_options['water_minimum']) + _('cm') + '.\n' + _('Scheduler is now disabled and all Stations turn Off.'))
                     try:
                         from plugins.email_notifications import email
                         email(TEXT)
-                        log.info(NAME, 'Email was sent: ' + TEXT)
+                        log.info(NAME, _('Email was sent') + ': ' + TEXT)
                         send = False
                     except Exception as err:
-                        log.error(NAME, 'Email was not sent! ' + str(err))
+                        log.error(NAME, _('Email was not sent') + '! ' + str(err))
 
                 self._sleep(10) # 2 for tested 
                 log.clear(NAME)
 
             except Exception:
-                log.error(NAME, 'Water tank and humidity Monitor plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Water tank and humidity Monitor plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 
