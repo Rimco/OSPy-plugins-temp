@@ -164,6 +164,11 @@ class install_page(ProtectedPage):
         f.write("interval = 4\n")
         f.write("max-load-1 = 24\n")
         f.close()
+
+        cmd = "sudo update-rc.d watchdog defaults" 
+        log.debug(NAME, cmd)
+        run_process(cmd)
+
         reboot(True) # reboot HW software after instal watchdog
         return self.core_render.restarting(plugin_url(status_page))
 
@@ -190,6 +195,9 @@ class start_page(ProtectedPage):
         log.debug(NAME, cmd)
         run_process(cmd)
         cmd = "sudo /etc/init.d/watchdog start"
+        log.debug(NAME, cmd)
+        run_process(cmd)
+        cmd = "sudo update-rc.d watchdog defaults" 
         log.debug(NAME, cmd)
         run_process(cmd)
         restart(3)
