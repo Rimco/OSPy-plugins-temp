@@ -16,6 +16,7 @@ from ospy.log import log
 from plugins import PluginOptions, plugin_url, plugin_data_dir
 from ospy.webpages import ProtectedPage
 
+import i18n
 
 NAME = 'Webcam Monitor'
 LINK = 'settings_page'
@@ -62,8 +63,8 @@ def get_run_cam():
             if os.path.exists('/dev/video0'):              # if usb cam exists
                 if not os.path.exists("/usr/bin/fswebcam"): # if fswebcam is installed
                     log.clear(NAME)
-                    log.info(NAME, 'Fswebcam is not installed.')
-                    log.info(NAME, 'Please wait installing....')
+                    log.info(NAME, _('Fswebcam is not installed.'))
+                    log.info(NAME, _('Please wait installing....'))
                     cmd = "sudo apt-get install fswebcam"
                     proc = subprocess.Popen(
                         cmd,
@@ -77,7 +78,7 @@ def get_run_cam():
                 else:
                     cam_options['installed_fswebcam'] = True
                     log.clear(NAME)
-                    log.info(NAME, 'Please wait...')
+                    log.info(NAME, _('Please wait...'))
 
                     cmd = "fswebcam -r " + cam_options[
                         'resolution'] + flip_img_h + flip_img_v + " --info OpenSprinkler -S 3 --save " + get_image_location()
@@ -89,19 +90,19 @@ def get_run_cam():
                     output = proc.communicate()[0]
                     text = re.sub('\x1b[^m]*m', '', output) # remove color character from communication in text
                     log.info(NAME, text)
-                    log.info(NAME, 'Ready...')
+                    log.info(NAME, _('Ready...'))
             else:
                 log.clear(NAME)
-                log.info(NAME, 'Cannot find USB camera (/dev/video0).')
+                log.info(NAME, _('Cannot find USB camera (/dev/video0).'))
                 cam_options['installed_fswebcam'] = False
 
         else:
             log.clear(NAME)
-            log.info(NAME, 'Plugin is disabled...')
+            log.info(NAME, _('Plugin is disabled...'))
             cam_options['installed_fswebcam'] = False
 
     except Exception:
-        log.error(NAME, 'Webcam plug-in:\n' + traceback.format_exc())
+        log.error(NAME, _('Webcam plug-in') + ':\n' + traceback.format_exc())
         cam_options['installed_fswebcam'] = False
 
 
@@ -141,6 +142,6 @@ class download_page(ProtectedPage):
             with open(get_image_location()) as f:
                 return f.read()
         except:
-            log.info(NAME, 'No image file from downloading. Retry')
+            log.info(NAME, _('No image file from downloading. Retry'))
             raise web.seeother(plugin_url(settings_page), True)
 
