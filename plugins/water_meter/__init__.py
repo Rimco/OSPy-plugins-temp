@@ -16,6 +16,7 @@ from plugins import PluginOptions, plugin_url
 from ospy.webpages import ProtectedPage
 from ospy.helpers import get_rpi_revision
 
+import i18n
 
 NAME = 'Water Meter'
 LINK = 'settings_page'
@@ -66,7 +67,7 @@ class WaterSender(Thread):
 
             self.bus = smbus.SMBus(1 if get_rpi_revision() >= 2 else 0)
         except ImportError:
-            log.warning(NAME, 'Could not import smbus.')
+            log.warning(NAME, _('Could not import smbus.'))
 
         if self.bus is not None:
             self.pcf = set_counter(self.bus)     # set pcf8583 as counter
@@ -92,16 +93,16 @@ class WaterSender(Thread):
 
                     if once_text:
                         log.clear(NAME)
-                        log.info(NAME, 'Water Meter plug-in is enabled.')
+                        log.info(NAME, _('Water Meter plug-in is enabled.'))
                         once_text = False
                         two_text = True
                         if self.pcf is None:
-                            log.warning(NAME, 'Could not find PCF8583.')
+                            log.warning(NAME, _('Could not find PCF8583.'))
                         else:
-                            log.info(NAME, 'Please wait for min/hour data...')
+                            log.info(NAME, _('Please wait for min/hour data...'))
                             log.info(NAME, '________________________________')
-                            log.info(NAME, 'Water in liters')
-                            log.info(NAME, 'Saved water summary: ' + str(sum_water))
+                            log.info(NAME, _('Water in liters'))
+                            log.info(NAME, _('Saved water summary') + ': ' + str(sum_water))
 
                     if self.pcf is not None:
                         sum_water = sum_water + val
@@ -112,10 +113,10 @@ class WaterSender(Thread):
                         if actual_time - last_minute_time >= 60:          # minute counter
                             last_minute_time = actual_time
                             log.clear(NAME)
-                            log.info(NAME, 'Water in liters')
-                            log.info(NAME, 'Water per minutes: ' + str(minute_water))
-                            log.info(NAME, 'Water per hours:   ' + str(hour_water))
-                            log.info(NAME, 'Water summary:     ' + str(sum_water))
+                            log.info(NAME, _('Water in liters'))
+                            log.info(NAME, _('Water per minutes') + ': ' + str(minute_water))
+                            log.info(NAME, _('Water per hours') + ': ' + str(hour_water))
+                            log.info(NAME, _('Water summary') + ': ' + str(sum_water))
                             minute_water = 0
 
                             options.__setitem__('sum',
@@ -129,7 +130,7 @@ class WaterSender(Thread):
                     if two_text:
                         self.status['meter'] = '0.0'
                         log.clear(NAME)
-                        log.info(NAME, 'Water Meter plug-in is disabled.')
+                        log.info(NAME, _('Water Meter plug-in is disabled.'))
                         two_text = False
                         once_text = True
 
@@ -137,7 +138,7 @@ class WaterSender(Thread):
 
             except Exception:
                 self.bus = None
-                log.error(NAME, 'Water Meter plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Water Meter plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 
@@ -170,10 +171,10 @@ def set_counter(i2cbus):
         i2cbus.write_byte_data(pcf_addr, 0x01, 0x00) # reset LSB
         i2cbus.write_byte_data(pcf_addr, 0x02, 0x00) # reset midle Byte
         i2cbus.write_byte_data(pcf_addr, 0x03, 0x00) # reset MSB
-        log.info(NAME, 'Setup PCF8583 as event counter is OK')
+        log.info(NAME, _('Setup PCF8583 as event counter is OK'))
         return 1  
     except:
-        log.error(NAME, 'Water Meter plug-in:\n' + 'Setup PCF8583 as event counter - FAULT')
+        log.error(NAME, _('Water Meter plug-in') + ':\n' + _('Setup PCF8583 as event counter - FAULT'))
         return None
 
 def counter(i2cbus): # reset PCF8583, measure pulses and return number pulses per second
@@ -225,9 +226,9 @@ class reset_page(ProtectedPage):
     def POST(self):
         options.__setitem__('sum', 0)
         log.clear(NAME)
-        log.info(NAME, 'Water summary was reseting...')
-        log.info(NAME, 'Water in liters')
-        log.info(NAME, 'Water summary:     ' + str(options['sum']))
+        log.info(NAME, _('Water summary was reseting...'))
+        log.info(NAME, _('Water in liters'))
+        log.info(NAME, _('Water summary') + ': ' + str(options['sum']))
 
         if water_sender is not None:
             water_sender.update()
