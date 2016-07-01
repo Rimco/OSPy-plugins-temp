@@ -15,6 +15,8 @@ from plugins import PluginOptions, plugin_url, plugin_data_dir
 from ospy.webpages import ProtectedPage
 from ospy.helpers import get_rpi_revision, datetime_string, reboot, restart
 
+import i18n
+
 NAME = 'Button Control'
 LINK = 'settings_page'
 
@@ -65,7 +67,7 @@ class PluginSender(Thread):
             import smbus  
             self.bus = smbus.SMBus(1 if get_rpi_revision() >= 2 else 0)
         except ImportError:
-            log.warning(NAME, 'Could not import smbus.')
+            log.warning(NAME, _('Could not import smbus.'))
         
         log.clear(NAME)    
         while not self._stop.is_set():
@@ -76,7 +78,7 @@ class PluginSender(Thread):
 
             except Exception:
                 log.clear(NAME)
-                log.error(NAME, 'Button plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Button plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
                 
 
@@ -110,31 +112,31 @@ def read_buttons():
         button_number = 0
         if MySwitch == 0b10000000:
             button_number = 128
-            log.debug(NAME, 'Switch 8 pressed')
+            log.debug(NAME, _('Switch 8 pressed'))
         if MySwitch == 0b010000000:
             button_number = button_number + 64
-            log.debug(NAME, 'Switch 7 pressed')    
+            log.debug(NAME, _('Switch 7 pressed'))
         if MySwitch == 0b00100000:
             button_number = button_number + 32
-            log.debug(NAME, 'Switch 6 pressed')
+            log.debug(NAME, _('Switch 6 pressed'))
         if MySwitch == 0b00010000:
             button_number = button_number + 16
-            log.debug(NAME, 'Switch 5 pressed')    
+            log.debug(NAME, _('Switch 5 pressed'))
         if MySwitch == 0b00001000:
             button_number = button_number + 8
-            log.debug(NAME, 'Switch 4 pressed')    
+            log.debug(NAME, _('Switch 4 pressed'))
         if MySwitch == 0b00000100:
             button_number = button_number + 4
-            log.debug(NAME, 'Switch 3 pressed')    
+            log.debug(NAME, _('Switch 3 pressed'))
         if MySwitch == 0b00000010:
             button_number = button_number + 2
-            log.debug(NAME, 'Switch 2 pressed')    
+            log.debug(NAME, _('Switch 2 pressed'))
         if MySwitch == 0b00000001:
             button_number = button_number + 1
-            log.debug(NAME, 'Switch 1 pressed')    
+            log.debug(NAME, _('Switch 1 pressed'))
         return button_number 
     except:
-        log.error(NAME, 'Button plug-in:\n' + 'Read button - FAULT')
+        log.error(NAME, _('Button plug-in') + ':\n' + _('Read button - FAULT'))
         self._sleep(60)
         return 0
 
@@ -150,7 +152,7 @@ def led_outputs():
         # bus.write_byte_data(DEVICE,OLATA,0)
         # example (DEVICE,IODIRB, from 001 to 111) out 1 to 8
     except:
-        log.error(NAME, 'Button plug-in:\n' + 'Set LED - FAULT') 
+        log.error(NAME, _('Button plug-in') + ':\n' + _('Set LED - FAULT'))
         
 
 ################################################################################
