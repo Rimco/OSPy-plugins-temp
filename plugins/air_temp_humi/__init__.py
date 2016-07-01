@@ -19,6 +19,8 @@ from ospy.helpers import datetime_string
 
 import RPi.GPIO as GPIO
 
+import i18n
+
 NAME = 'Air Temperature and Humidity Monitor'
 LINK = 'settings_page'
 
@@ -79,8 +81,8 @@ class Sender(Thread):
                        self.status['temp'] = Temperature
                        self.status['humi'] = Humidity
                        log.info(NAME, datetime_string())
-                       log.info(NAME, 'Temperature: ' + u'%.1f \u2103' % Temperature)
-                       log.info(NAME, 'Humidity: ' + u'%.1f' % Humidity + ' %RH')
+                       log.info(NAME, _('Temperature') + ': ' + u'%.1f \u2103' % Temperature)
+                       log.info(NAME, _('Humidity') + ': ' + u'%.1f' % Humidity + ' %RH')
 
                        if plugin_options['enable_log']:
                           update_log(self.status)
@@ -88,7 +90,7 @@ class Sender(Thread):
                        self._sleep(max(60, plugin_options['log_interval'] * 60))
 
             except Exception:
-                log.error(NAME, 'Air Temperature and Humidity Monitor plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Air Temperature and Humidity Monitor plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 sender = None
@@ -271,7 +273,7 @@ class delete_log_page(ProtectedPage):  # delete log file from web
 
     def GET(self):
         write_log([])
-        log.info(NAME, 'Deleted log file')
+        log.info(NAME, _('Deleted log file'))
         raise web.seeother(plugin_url(settings_page), True)
 
 
