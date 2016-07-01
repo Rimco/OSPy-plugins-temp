@@ -1,6 +1,6 @@
 $def with(plugin_options, events)
 
-$var title: Button control settings
+$var title: $_('Button control settings')
 $var page: plugins
 
 <script>
@@ -16,37 +16,37 @@ $var page: plugins
 </script>
 
 <div id="plugin">
-    <div class="title">Button control settings</div>
-    <p>This plugin uses a circuit board with MCP23017 controller connected to the OSPy Sprinkler board via the I2C interface.</p>
-    <p>This plug-in includes eight buttons with optional functions and signalisating via eicht LEDs.</p>
-    <p>Visit <a href="https://pihrt.com/elektronika/323-moje-raspberry-pi-plugin-ospy-8-tlacitek-8-led">Martin Pihrt's blog</a> for more information.</p><br>
+    <div class="title">$_('Button control settings')</div>
+    <p>$_('This plugin uses a circuit board with MCP23017 controller connected to the OSPy Sprinkler board via the I2C interface').</p>
+    <p>$_('This plug-in includes eight buttons with optional functions and signalisating via eicht LEDs').</p>
+    <p>$_('Visit') <a href="https://pihrt.com/elektronika/323-moje-raspberry-pi-plugin-ospy-8-tlacitek-8-led">Martin Pihrt's blog</a> $_('for more information').</p><br>
     <form id="pluginForm" action="$plugins.plugin_url('button_control.settings_page')" method="post">
         <table class="optionList">
             <tr>
-                <td style='text-transform: none;'>Use button control:</td>
+                <td style='text-transform: none;'>$_('Use button control'):</td>
                 <td>
                     <input name='use_button' type='checkbox'${" checked" if plugin_options['use_button'] else ""}>
                 </td>
             </tr>
             $for i in range(8):
               <tr>
-                <td style="text-transform: none;">Button ${i} controls:</td>
+                <td style="text-transform: none;">$_('Button') ${i} $_('controls'):</td>
                 <td>
                 <select id="button${i}" name="button${i}">    
-                    <option value='reboot'   ${"selected" if plugin_options['button%d' % i]== 'reboot' else ""}> Reboot OS system</option>
-                    <option value='pwrOff'   ${"selected" if plugin_options['button%d' % i]== 'pwrOff' else ""}> Shutdown OS system</option>
-                    <option value='stopAll'  ${"selected" if plugin_options['button%d' % i]== 'stopAll' else ""}> Stop all station</option>
-                    <option value='schedEn'  ${"selected" if plugin_options['button%d' % i]== 'schedEn' else ""}> Enable scheduler</option>
-                    <option value='schedDis' ${"selected" if plugin_options['button%d' % i]== 'schedDis' else ""}> Disable scheduler</option>
-                    <option value='RunP1'    ${"selected" if plugin_options['button%d' % i]== 'RunP1' else ""}> Run program 1</option>
-                    <option value='RunP2'    ${"selected" if plugin_options['button%d' % i]== 'RunP2' else ""}> Run program 2</option>
-                    <option value='RunP3'    ${"selected" if plugin_options['button%d' % i]== 'RunP3' else ""}> Run program 3</option>
-                    <option value='RunP4'    ${"selected" if plugin_options['button%d' % i]== 'RunP4' else ""}> Run program 4</option>
+                    <option value='reboot'   ${"selected" if plugin_options['button%d' % i]== 'reboot' else ""}> $_('Reboot OS system')</option>
+                    <option value='pwrOff'   ${"selected" if plugin_options['button%d' % i]== 'pwrOff' else ""}> $_('Shutdown OS system')</option>
+                    <option value='stopAll'  ${"selected" if plugin_options['button%d' % i]== 'stopAll' else ""}> $_('Stop all station')</option>
+                    <option value='schedEn'  ${"selected" if plugin_options['button%d' % i]== 'schedEn' else ""}> $_('Enable scheduler')</option>
+                    <option value='schedDis' ${"selected" if plugin_options['button%d' % i]== 'schedDis' else ""}> $_('Disable scheduler')</option>
+                    <option value='RunP1'    ${"selected" if plugin_options['button%d' % i]== 'RunP1' else ""}> $_('Run program 1')</option>
+                    <option value='RunP2'    ${"selected" if plugin_options['button%d' % i]== 'RunP2' else ""}> $_('Run program 2')</option>
+                    <option value='RunP3'    ${"selected" if plugin_options['button%d' % i]== 'RunP3' else ""}> $_('Run program 3')</option>
+                    <option value='RunP4'    ${"selected" if plugin_options['button%d' % i]== 'RunP4' else ""}> $_('Run program 4')</option>
                  </select>
                 </td>
               </tr>
             <tr>
-                <td style='text-transform: none;'>Status:</td>
+                <td style='text-transform: none;'>$_('Status'):</td>
                 <td>
                     <textarea style="font-family: monospace;" rows="7" cols="35" readonly>$'\n'.join(events)</textarea>
                 </td>
@@ -55,7 +55,7 @@ $var page: plugins
     </form>
 </div>
 <div id="controls">
-    <button id="cSubmit" class="submit"><b>Submit</b></button>
-    <button id="cCancel" class="cancel danger">Cancel</button>
+    <button id="cSubmit" class="submit"><b>$_('Submit')</b></button>
+    <button id="cCancel" class="cancel danger">$_('Cancel')</button>
 </div>
                                   
