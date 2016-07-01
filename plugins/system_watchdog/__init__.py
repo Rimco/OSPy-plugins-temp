@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'Martin Pihrt'
 # this plugins enable or disable system RPi HW watchdog 
+# help: https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=147501
 
 from threading import Thread, Event
 import time
@@ -131,7 +132,7 @@ class status_page(ProtectedPage):
 
     def GET(self):  
         log.clear(NAME)
-        cmd = "sudo service watchdog status"
+        cmd = "sudo systemctl status watchdog"
         run_process(cmd)
         return self.plugin_render.system_watchdog(checker.status, log.events(NAME))
 
@@ -165,7 +166,13 @@ class install_page(ProtectedPage):
         f.write("max-load-1 = 24\n")
         f.close()
 
-        cmd = "sudo update-rc.d watchdog defaults" 
+        cmd = "sudo systemctl enable watchdog"
+        log.debug(NAME, cmd)
+        run_process(cmd)
+        cmd = "sudo systemctl daemon-reload"
+        log.debug(NAME, cmd)
+        run_process(cmd)
+        cmd = "sudo systemctl start watchdog"
         log.debug(NAME, cmd)
         run_process(cmd)
 
@@ -177,28 +184,32 @@ class stop_page(ProtectedPage):
 
     def GET(self):
         log.clear(NAME)
-        cmd = "sudo service watchdog stop"
+        cmd = "sudo systemctl stop watchdog"
         log.debug(NAME, cmd) 
         run_process(cmd)
-        cmd = "sudo update-rc.d watchdog remove" 
+        cmd = "sudo systemctl disable watchdog"
+        log.debug(NAME, cmd)
+        run_process(cmd)
+        cmd = "sudo systemctl daemon-reload"
         log.debug(NAME, cmd)
         run_process(cmd)
         restart(3) 
         return self.core_render.restarting(plugin_url(status_page))      
-
+        
 class start_page(ProtectedPage):
     """Start watchdog service page"""
 
     def GET(self):
         log.clear(NAME)
-        cmd = "sudo chkconfig watchdog on" 
+        cmd = "sudo systemctl start watchdog"
         log.debug(NAME, cmd)
         run_process(cmd)
-        cmd = "sudo /etc/init.d/watchdog start"
+        cmd = "sudo systemctl enable watchdog"
         log.debug(NAME, cmd)
         run_process(cmd)
-        cmd = "sudo update-rc.d watchdog defaults" 
+        cmd = "sudo systemctl daemon-reload"
         log.debug(NAME, cmd)
         run_process(cmd)
         restart(3)
         return self.core_render.restarting(plugin_url(status_page))
+        
