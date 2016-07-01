@@ -17,6 +17,7 @@ from ospy.webpages import ProtectedPage
 from ospy.helpers import get_rpi_revision
 from ospy.helpers import datetime_string
 
+import i18n
 
 NAME = 'Voltage and Temperature Monitor'
 LINK = 'settings_page'
@@ -82,7 +83,7 @@ class PCFSender(Thread):
 
             self.adc = smbus.SMBus(1 if get_rpi_revision() >= 2 else 0)
         except ImportError:
-            log.warning(NAME, 'Could not import smbus.')
+            log.warning(NAME, _('Could not import smbus.'))
 
         while not self._stop.is_set():
             log.clear(NAME)
@@ -110,7 +111,7 @@ class PCFSender(Thread):
 
             except Exception:
                 self.adc = None
-                log.error(NAME, 'Voltage and Temperature Monitor plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Voltage and Temperature Monitor plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 
@@ -260,7 +261,7 @@ class delete_log_page(ProtectedPage):  # delete log file from web
 
     def GET(self):
         write_log([])
-        log.info(NAME, 'Deleted log file')
+        log.info(NAME, _('Deleted log file'))
         raise web.seeother(plugin_url(settings_page), True)
 
 
