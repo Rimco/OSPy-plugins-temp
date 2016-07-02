@@ -173,11 +173,11 @@ def get_report(index):
              else:
                  result = "neaktivni"
         elif index == 16:
-            result = 'Naposledy'
+            result = 'Naposledy bezel'
         elif index == 17:
             finished = [run for run in log.finished_runs() if not run['blocked']]
             if finished:
-                result = finished[-1]['start'].strftime('v %H %M bezel ') + finished[-1]['program_name']
+                result = finished[-1]['start'].strftime('dne %d-%m-%Y v %H:%M program: ') + finished[-1]['program_name']
             else:
                 result = 'zadny program'
         elif index == 18:
