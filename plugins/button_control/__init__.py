@@ -73,7 +73,9 @@ class PluginSender(Thread):
         while not self._stop.is_set():
             try:
                 if plugin_options['use_button']:  # if button plugin is enabled
-                    read_buttons()
+                    actual_buttons = read_buttons()
+                    if actual_buttons == 1 and plugin_options['schedEn']:
+                       print "test but1 scheduler en" #todo
                     self._sleep(1)
 
             except Exception:
@@ -136,8 +138,8 @@ def read_buttons():
             log.debug(NAME, _('Switch 1 pressed'))
         return button_number 
     except:
+        log.clear(NAME)
         log.error(NAME, _('Button plug-in') + ':\n' + _('Read button - FAULT'))
-        self._sleep(60)
         return 0
 
 def led_outputs():
