@@ -82,6 +82,10 @@ msgstr ""
 msgid "Visit"
 msgstr ""
 
+#: plugins/button_control/templates/button_control.html:22
+msgid "for more information"
+msgstr ""
+
 #: plugins/button_control/templates/button_control.html:26
 msgid "Use button control"
 msgstr ""
