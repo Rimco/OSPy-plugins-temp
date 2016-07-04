@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2016-07-04 14:12+0200\n"
+"PO-Revision-Date: 2016-07-04 14:20+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.8\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Language: cs_CZ\n"
+
+#: plugins/button_control/__init__.py:70
+msgid "Could not import smbus."
+msgstr "Nelze načíst sběrnici smbus."
+
+#: plugins/button_control/__init__.py:83 plugins/button_control/__init__.py:142
+#: plugins/button_control/__init__.py:157
+msgid "Button plug-in"
+msgstr "Rozšíření tlačítka"
+
+#: plugins/button_control/__init__.py:117
+msgid "Switch 8 pressed"
+msgstr "Stisknuto tlačítko 8"
+
+#: plugins/button_control/__init__.py:120
+msgid "Switch 7 pressed"
+msgstr "Stisknuto tlačítko 7"
+
+#: plugins/button_control/__init__.py:123
+msgid "Switch 6 pressed"
+msgstr "Stisknuto tlačítko 6"
+
+#: plugins/button_control/__init__.py:126
+msgid "Switch 5 pressed"
+msgstr "Stisknuto tlačítko 5"
+
+#: plugins/button_control/__init__.py:129
+msgid "Switch 4 pressed"
+msgstr "Stisknuto tlačítko 4"
+
+#: plugins/button_control/__init__.py:132
+msgid "Switch 3 pressed"
+msgstr "Stisknuto tlačítko 3"
+
+#: plugins/button_control/__init__.py:135
+msgid "Switch 2 pressed"
+msgstr "Stisknuto tlačítko 2"
+
+#: plugins/button_control/__init__.py:138
+msgid "Switch 1 pressed"
+msgstr "Stisknuto tlačítko 1"
+
+#: plugins/button_control/__init__.py:142
+msgid "Read button - FAULT"
+msgstr "Chyba - čtení tlačítek"
+
+#: plugins/button_control/__init__.py:157
+msgid "Set LED - FAULT"
+msgstr "Chyba - nastavení LED výstupů"
+
+#: plugins/button_control/templates/button_control.html:3
+#: plugins/button_control/templates/button_control.html:19
+msgid "Button control settings"
+msgstr "Nastavení ovládání tlačítek"
+
+#: plugins/button_control/templates/button_control.html:20
+msgid ""
+"This plugin uses a circuit board with MCP23017 controller connected to the "
+"OSPy Sprinkler board via the I2C interface"
+msgstr ""
+"Toto rozšíření používá obvod MCP23017 připojený přes I2C sběrnici k OSPy "
+"Sprinkleru"
+
+#: plugins/button_control/templates/button_control.html:21
+msgid ""
+"This plug-in includes eight buttons with optional functions and "
+"signalisating via eicht LEDs"
+msgstr ""
+"Toto rozšíření umožňuje pomocí 8 tlačítek ovládat 8 funkcí OSPy systému "
+"(stav je zobrazován u tlačítka pomocí LED diod)"
+
+#: plugins/button_control/templates/button_control.html:22
+msgid "Visit"
+msgstr "Navštivte"
+
+#: plugins/button_control/templates/button_control.html:26
+msgid "Use button control"
+msgstr "Povolit rozšíření"
+
+#: plugins/button_control/templates/button_control.html:33
+msgid "Button"
+msgstr "Tlačítko"
+
+#: plugins/button_control/templates/button_control.html:33
+msgid "controls"
+msgstr "ovládá"
+
+#: plugins/button_control/templates/button_control.html:36
+msgid "Reboot OS system"
+msgstr "Restartovat OS systém"
+
+#: plugins/button_control/templates/button_control.html:37
+msgid "Shutdown OS system"
+msgstr "Vypnout OS systém"
+
+#: plugins/button_control/templates/button_control.html:38
+msgid "Stop all station"
+msgstr "Zastavit všechny stanice"
+
+#: plugins/button_control/templates/button_control.html:39
+msgid "Enable scheduler"
+msgstr "Povolit plánovač"
+
+#: plugins/button_control/templates/button_control.html:40
+msgid "Disable scheduler"
+msgstr "Zakázat plánovač"
+
+#: plugins/button_control/templates/button_control.html:41
+msgid "Run program 1"
+msgstr "Spustit program 1"
+
+#: plugins/button_control/templates/button_control.html:42
+msgid "Run program 2"
+msgstr "Spustit program 2"
+
+#: plugins/button_control/templates/button_control.html:43
+msgid "Run program 3"
+msgstr "Spustit program 3"
+
+#: plugins/button_control/templates/button_control.html:44
+msgid "Run program 4"
+msgstr "Spustit program 4"
+
+#: plugins/button_control/templates/button_control.html:49
+msgid "Status"
+msgstr "Stav"
+
+#: plugins/button_control/templates/button_control.html:58
+msgid "Submit"
+msgstr "Potvrdit"
+
+#: plugins/button_control/templates/button_control.html:59
+msgid "Cancel"
+msgstr "Zpět"
