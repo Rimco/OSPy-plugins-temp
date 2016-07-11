@@ -81,38 +81,44 @@ class WindSender(Thread):
 
         log.clear(NAME)
         send = False      # send email
-        l = [] # list 10 measures
-        x = 1  # index of list  
-        avg_puls = 0 # average pulses
         disable_text = True
+        val = 0.0
+        maxval = 0.0
+        timer_reset = 0
 
         while not self._stop.is_set():
             try:
                 if self.bus is not None and wind_options['use_wind_monitor']:  # if wind plugin is enabled
                     disable_text = True
-                    log.info(NAME, _('Please wait 10 sec...'))
-                    while x <= 10:
-                       puls = counter(self.bus)
-                       l.append(puls)
-                       x = x + 1
-                       self._sleep(1)
- 
-                    avg_puls = reduce(lambda x, y: x + y, l) / len(l)
-                    if avg_puls >= 42: # maximum pulses from counter
-                       log.error(NAME, _('Wind speed > 150 km/h (42 m/sec)'))
-                       x = 0
-                       l = []
+                                        
+                    puls = counter(self.bus)/10.0 # counter value is value/10sec
+                                                                                                      
+                    val = puls/(wind_options['pulses']*1.0)
+                    val = val*wind_options['metperrot'] 
                     
-                    val = (avg_puls/wind_options['pulses'])*wind_options['metperrot'] 
+                    if val > maxval:
+                        maxval = val
+
+                    if timer_reset >= 86400: # 1 day
+                       timer_reset = 0
+                       maxval = 0.0
+
                     self.status['meter'] = round(val,2)
                     self.status['kmeter'] = round(val*3.6,2)
+
                     log.clear(NAME)
                     log.info(NAME, _('Please wait 10 sec...'))
-                    log.info(NAME, _('Average m/sec') + ': ' + str(round(val,2)))
-                    log.info(NAME, _('Average pulses/sec') + ': ' + str(avg_puls))
+                    log.info(NAME, _('Speed') + ' ' + str(round(val,2)) + ' ' + _('m/sec'))
+                    log.info(NAME, _('Speed Peak 24 hour') + ' ' + str(round(maxval,2)) + ' ' + _('m/sec') )
+                    log.info(NAME, _('Pulses') + ' ' + str(puls) + ' ' + _('pulses/sec') )
+
+                      
+                    if val >= 42: 
+                       log.error(NAME, _('Wind speed > 150 km/h (42 m/sec)'))
+                   
                    
                     if get_station_is_on():                               # if station is on
-                       if int(val) >= int(wind_options['maxspeed']):      # if wind speed is > options max speed
+                       if val >= int(wind_options['maxspeed']):           # if wind speed is > options max speed
                           log.clear(NAME)
                           log.finish_run(None)                            # save log
                           stations.clear()                                # set all station to off
@@ -139,11 +145,8 @@ class WindSender(Thread):
                         log.clear(NAME)
                         log.error(NAME, _('Email was not sent') + '! ' + traceback.format_exc())
 
-                if x >= 10: # erase list pulses
-                   x = 0
-                   l = []
-
-                self._sleep(1)
+                timer_reset+=10 # measure is 10 sec long
+                
 
             except Exception:
                 log.clear(NAME)
@@ -198,7 +201,7 @@ def counter(i2cbus): # reset PCF8583, measure pulses and return number pulses pe
         i2cbus.write_byte_data(pcf_addr, 0x01, 0x00) # reset LSB
         i2cbus.write_byte_data(pcf_addr, 0x02, 0x00) # reset midle Byte
         i2cbus.write_byte_data(pcf_addr, 0x03, 0x00) # reset MSB
-        time.sleep(1)
+        time.sleep(10)
         # read number (pulses in counter) and translate to DEC
         counter = i2cbus.read_i2c_block_data(pcf_addr, 0x00)
         num1 = (counter[1] & 0x0F)             # units
