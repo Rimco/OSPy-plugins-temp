@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2016-06-15 11:42+0200\n"
-"PO-Revision-Date: 2016-06-15 11:58+0200\n"
+"PO-Revision-Date: 2016-07-11 17:03+0200\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.8\n"
 "Last-Translator: Martin Pihrt <martinpihrt@gmail.com>\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "Language: cs_CZ\n"
@@ -20,6 +20,18 @@ msgstr ""
 #: plugins/wind_monitor/__init__.py:77
 msgid "Could not import smbus."
 msgstr "Nemohu načíst sběrnici smbus."
+
+#: plugins/wind_monitor/__init__.py:111
+msgid "Speed"
+msgstr "Rychlost větru"
+
+#: plugins/wind_monitor/__init__.py:112
+msgid "Speed Peak 24 hour"
+msgstr "Maximální rychlost větru za 24 hodin"
+
+#: plugins/wind_monitor/__init__.py:113
+msgid "Pulses"
+msgstr "Počet pulsů ze snímače"
 
 #: plugins/wind_monitor/__init__.py:93 plugins/wind_monitor/__init__.py:110
 msgid "Please wait 10 sec..."
@@ -30,12 +42,12 @@ msgid "Wind speed > 150 km/h (42 m/sec)"
 msgstr "Rychlost větru je vyšší než 150 km/hodina (42 m/vteřinu)"
 
 #: plugins/wind_monitor/__init__.py:111
-msgid "Average m/sec"
-msgstr "Průměr m/vteřinu"
+msgid "m/sec"
+msgstr "m/vteřinu"
 
 #: plugins/wind_monitor/__init__.py:112
-msgid "Average pulses/sec"
-msgstr "Průměr pulsy/vteřinu"
+msgid "pulses/sec"
+msgstr "pulsy/vteřinu"
 
 #: plugins/wind_monitor/__init__.py:120
 msgid "Stops all stations and sends email if enabled sends email."
@@ -151,8 +163,8 @@ msgid "Max wind speed for stop stations"
 msgstr "Maximální rychlost větru, která vypne stanice"
 
 #: plugins/wind_monitor/templates/wind_monitor.html:65
-msgid "Wind speed state (average every 10 sec)"
-msgstr "Stav rychlosti větru (průměr každých 10 vteřin)"
+msgid "Wind speed state (every 10 sec)"
+msgstr "Stav rychlosti větru (každých 10 vteřin)"
 
 #: plugins/wind_monitor/templates/wind_monitor.html:71
 msgid "Status"
