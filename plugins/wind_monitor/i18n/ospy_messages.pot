@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2016-06-15 11:41+CEST\n"
+"POT-Creation-Date: 2016-07-11 16:51+CEST\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,55 +19,67 @@ msgstr ""
 msgid "Could not import smbus."
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:93 plugins/wind_monitor/__init__.py:110
+#: plugins/wind_monitor/__init__.py:110
 msgid "Please wait 10 sec..."
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:102
-msgid "Wind speed > 150 km/h (42 m/sec)"
+#: plugins/wind_monitor/__init__.py:111
+msgid "Speed"
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:111
-msgid "Average m/sec"
+#: plugins/wind_monitor/__init__.py:111 plugins/wind_monitor/__init__.py:112
+msgid "m/sec"
 msgstr ""
 
 #: plugins/wind_monitor/__init__.py:112
-msgid "Average pulses/sec"
+msgid "Speed Peak 24 hour"
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:120
+#: plugins/wind_monitor/__init__.py:113
+msgid "Pulses"
+msgstr ""
+
+#: plugins/wind_monitor/__init__.py:113
+msgid "pulses/sec"
+msgstr ""
+
+#: plugins/wind_monitor/__init__.py:117
+msgid "Wind speed > 150 km/h (42 m/sec)"
+msgstr ""
+
+#: plugins/wind_monitor/__init__.py:126
 msgid "Stops all stations and sends email if enabled sends email."
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:128
+#: plugins/wind_monitor/__init__.py:134
 msgid "Wind speed monitor plug-in is disabled."
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:132
+#: plugins/wind_monitor/__init__.py:138
 msgid "System detected error: wind speed monitor. All stations set to OFF. Wind is"
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:136
+#: plugins/wind_monitor/__init__.py:142
 msgid "Email was sent"
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:140
+#: plugins/wind_monitor/__init__.py:146
 msgid "Email was not sent"
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:150
+#: plugins/wind_monitor/__init__.py:153
 msgid "Wind Speed monitor plug-in"
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:184
+#: plugins/wind_monitor/__init__.py:187
 msgid "Setup PCF8583 as event counter - OK"
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:184 plugins/wind_monitor/__init__.py:187
+#: plugins/wind_monitor/__init__.py:187 plugins/wind_monitor/__init__.py:190
 msgid "Wind speed monitor plug-in"
 msgstr ""
 
-#: plugins/wind_monitor/__init__.py:187
+#: plugins/wind_monitor/__init__.py:190
 msgid "Setup PCF8583 as event counter - FAULT"
 msgstr ""
 
@@ -135,7 +147,7 @@ msgid "Max wind speed for stop stations"
 msgstr ""
 
 #: plugins/wind_monitor/templates/wind_monitor.html:65
-msgid "Wind speed state (average every 10 sec)"
+msgid "Wind speed state (every 10 sec)"
 msgstr ""
 
 #: plugins/wind_monitor/templates/wind_monitor.html:71
