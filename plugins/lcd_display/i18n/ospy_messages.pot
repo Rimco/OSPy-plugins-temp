@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <martinpihrt@gmail.com>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2016-06-07 13:53+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <martinpihrt@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.7\n"
+
+#: plugins/lcd_display/__init__.py:29
+msgid "LCD Display"
+msgstr ""
+
+#: plugins/lcd_display/__init__.py:95
+msgid "LCD display plug-in:\n"
+msgstr ""
+
+#: plugins/lcd_display/__init__.py:298
+msgid "Could not import smbus."
+msgstr ""
+
+#: plugins/lcd_display/__init__.py:311
+msgid "Could not find any PCF8574 controller."
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:3
+#: plugins/lcd_display/templates/lcd_display.html:21
+msgid "LCD settings"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:22
+msgid "This plugin shows information on a 16x2 or 16x1 character LCD with"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:23
+msgid "Automatically detects the display at the following I2C addresses"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:24
+msgid "Compatible with the HD44780 controller"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:25
+msgid "Visit"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:29
+msgid "Use I2C LCD"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:35
+msgid "Use two lines"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:41
+msgid "Use print lines to debug files"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:47
+msgid "Status"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:56
+msgid "Submit"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:57
+msgid "Cancel"
+msgstr ""
+
+#: plugins/lcd_display/templates/lcd_display.html:25
+msgid "for more information"
+msgstr ""

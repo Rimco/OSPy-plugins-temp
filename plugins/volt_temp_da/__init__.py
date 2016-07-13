@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+__author__ = 'Martin Pihrt'
 # This plugin read data (temp or voltage) from I2C PCF8591 on adress 0x48. For temperature probe use LM35D (LM35DZ). 
 
 import json
@@ -15,6 +17,7 @@ from ospy.webpages import ProtectedPage
 from ospy.helpers import get_rpi_revision
 from ospy.helpers import datetime_string
 
+import i18n
 
 NAME = 'Voltage and Temperature Monitor'
 LINK = 'settings_page'
@@ -80,7 +83,7 @@ class PCFSender(Thread):
 
             self.adc = smbus.SMBus(1 if get_rpi_revision() >= 2 else 0)
         except ImportError:
-            log.warning(NAME, 'Could not import smbus.')
+            log.warning(NAME, _('Could not import smbus.'))
 
         while not self._stop.is_set():
             log.clear(NAME)
@@ -108,7 +111,7 @@ class PCFSender(Thread):
 
             except Exception:
                 self.adc = None
-                log.error(NAME, 'Voltage and Temperature Monitor plug-in:\n' + traceback.format_exc())
+                log.error(NAME, _('Voltage and Temperature Monitor plug-in') + ':\n' + traceback.format_exc())
                 self._sleep(60)
 
 
@@ -246,7 +249,7 @@ class log_csv(ProtectedPage):  # save log file from web as csv file type
         for record in log_records:
             data += record['datetime']
             for i in range(4):
-                data += ",\t" + record['ad%d' % i]
+                data += ";\t" + record['ad%d' % i]
             data += '\n'
 
         web.header('Content-Type', 'text/csv')
@@ -258,7 +261,7 @@ class delete_log_page(ProtectedPage):  # delete log file from web
 
     def GET(self):
         write_log([])
-        log.info(NAME, 'Deleted log file')
+        log.info(NAME, _('Deleted log file'))
         raise web.seeother(plugin_url(settings_page), True)
 
 
