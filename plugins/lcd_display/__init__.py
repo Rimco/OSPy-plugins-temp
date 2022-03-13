@@ -42,26 +42,26 @@ class LCDSender(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.daemon = True
-        self._stop = Event()
+        self._stop_event = Event()
 
         self._sleep_time = 0
         self.start()
 
     def stop(self):
-        self._stop.set()
+        self._stop_event.set()
 
     def update(self):
         self._sleep_time = 0
 
     def _sleep(self, secs):
         self._sleep_time = secs
-        while self._sleep_time > 0 and not self._stop.is_set():
+        while self._sleep_time > 0 and not self._stop_event.is_set():
             time.sleep(1)
             self._sleep_time -= 1
 
     def run(self):
         report_index = 0
-        while not self._stop.is_set():
+        while not self._stop_event.is_set():
             try:
                 if lcd_options['use_lcd']:  # if LCD plugin is enabled
                     if lcd_options['debug_line']:
@@ -204,7 +204,7 @@ def find_lcd_address():
         log.warning(NAME, 'Could not import smbus.')
     else:
 
-        for addr, pcf_type in search_range.iteritems():
+        for addr, pcf_type in search_range.items():
             try:
                 # bus.write_quick(addr)
                 bus.read_byte(addr) # DF - write_quick doesn't work on BBB
@@ -224,7 +224,7 @@ def update_lcd(line1, line2=None):
         find_lcd_address()
 
     if lcd_options['address'] != 0:
-        import pylcd2  # Library for LCD 16x2 PCF8574
+        from . import pylcd2  # Library for LCD 16x2 PCF8574
 
         lcd = pylcd2.lcd(lcd_options['address'], 0 if helpers.get_rpi_revision() == 1 else 1)
         # DF - alter RPi version test fallback to value that works on BBB
