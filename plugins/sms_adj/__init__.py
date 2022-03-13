@@ -205,10 +205,10 @@ def sms_check(self):
     for x in data:
         v = gammu.DecodeSMS(x)
         m = x[0]
-        print('%-15s: %s' % ('Sender', m['Number']))
-        print('%-15s: %s' % ('Date', str(m['DateTime'])))
-        print('%-15s: %s' % ('State', m['State']))
-        print('%-15s: %s' % ('SMS command', m['Text']))
+        log.debug(NAME, '%-15s: %s' % ('Sender', m['Number']))
+        log.debug(NAME, '%-15s: %s' % ('Date', str(m['DateTime'])))
+        log.debug(NAME, '%-15s: %s' % ('State', m['State']))
+        log.debug(NAME, '%-15s: %s' % ('SMS command', m['Text']))
         if (m['Number'] == tel1) or (m['Number'] == tel2):  # If telephone is admin 1 or admin 2
             log.info(NAME, datetime_string() + ': SMS from admin')
             if m['State'] == "UnRead":          # If SMS is unread
